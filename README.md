@@ -1,28 +1,47 @@
+# README
 
-Documentation Note
-======================
+This repository is a guide on how to patch iClicker firmware.  The iClicker is connected by SPI to an SPI-to-USB programmer, which is connected to a UNIX computer.  We document how we reverse-engineered the firmware and modified it to spoof votes from fake iClickers, successfully flooding a base station with these votes.
+
 This document was written several years after this project ended.  We are reconstructing what we did based on the patched code itself, and scraps of notes here and there.  Hence, some of it might be misleading, or straight wrong.  But we tried.  We really did!
 
 Feel free to submit pull requests.
 
-Overview
-==========
+## Disclaimer
+
+This is for educational use only.  Be responsible!
+
+## Usage
+
+* `compile.sh <FILENAME>`: Compiles `code/*` to an AVR binary and writes the binary to `stdout`.
+* `upload.sh <FILENAME> <DEVICE ID>`: Uploads a binary output by `compile.sh` to the iClicker.  `<DEVICE ID>` is in the form `/dev/tty*`.
+* `./download.sh <OUTPUT FILENAME> <DEVICE ID>`: Downloads the binary from iClicker flash to a file.
+
+e.g. to upload the infinite votes firmware described in this document:
+
+```
+./compile.sh code/infinite_votes_commented > infinite_votes_firmware.bin
+./upload.sh infinite_votes_firmware.bin /dev/tty*
+```
+where `/dev/tty*` should be the device handle for your serial programmer.
+
+# Details on the Reverse-Engineering Process 
+
 The original iClicker uses an ATMega8U2 chip as a microcontroller, which talks to a transceiver chip to transmit/receive votes.  The board has a 6-pin SPI interface (which one solders a header to) to talk to the chip.
 
 The chip has two relevant non-volatile memory sections:
 
-Flash: stores the firmware
-EEPROM: stores the unique iClicker ID and some copyright information
+* Flash: stores the firmware
+* EEPROM: stores the unique iClicker ID and some copyright information
 
-SPI Header
-=============
+## SPI Header
+
 TODO describe 6-pin SPI pinout
 
-Communication (Hardware)
-===========================
-To communicate to the AVR chip, we need an AVR programmer.  Commercial USB-to-SPI AVR programmers exist and are cheap, but fortunately it is possible to turn any Arduino into a programmer (see https://www.arduino.cc/en/Tutorial/ArduinoISP ).  The Arduino shows up as a device (/dev/tty* on Unix systems) and acts as an interface between our computer and the iClicker chip.
+## Communication (Hardware)
 
-After wiring it up according to the link above, we can communicate with the ATMega8U2 using avrdude:
+To communicate to the AVR chip, we need an AVR programmer.  Commercial USB-to-SPI AVR programmers exist and are cheap, but fortunately it is possible to turn any Arduino into a programmer (see https://www.arduino.cc/en/Tutorial/ArduinoISP ).  The Arduino shows up as a device (`/dev/tty*` on Unix systems) and acts as an interface between our computer and the iClicker chip.
+
+After wiring it up according to the link above, we can communicate with the ATMega8U2 using avrdude, using commands like:
 ```
 avrdude -v -P /dev/ttyACM0 -c avrisp -p m8 -b 19200 -U flash:w:new_flash12.bin:r
 ```
@@ -35,9 +54,9 @@ where the flags are:
 -b 19200: baud rate (19200 seems to work reliably)
 -U <memtype:op:filename:filefmt>: upload options.  See man avrdude for details
 ```
-Reading the program memory
-============================
-For the rest of the documentation, we assume our Arduino device handle is /dev/ttyACM0.
+## Reading the program memory
+
+For the rest of the documentation, we assume our Arduino device handle is `/dev/ttyACM0`.
 
 We can read the firmware with:
 ```
@@ -45,7 +64,7 @@ avrdude -v -P /dev/ttyACM0 -c avrisp -p m8 -b 19200 -U flash:r:<filename>.bin:r
 ```
 which will save the firmware in some raw format.
 
-At this point I'm sure there's some canonical way to disassemble the binary but we really just use this online disassembler ( https://www.onlinedisassembler.com/odaweb ) with format avr:4, disassemble the full file, and copy/paste the output.  The avid reader should figure out how to do it with avr-objdump, and submit a pull request.
+At this point I'm sure there's some canonical way to disassemble the binary but we really just use this online disassembler ( https://www.onlinedisassembler.com/odaweb ) with format `avr:4`, disassemble the full file, and copy/paste the output.  The avid reader should figure out how to do it with avr-objdump, and submit a pull request.
 
 The result looks something like:
 ```
@@ -58,8 +77,8 @@ The result looks something like:
 .data:0x0000000c    f9cf    rjmp .-14 ; 0x00000000  
 ...
 ```
-Patching the firmware
-========================
+## Patching the firmware
+
 When a vote occurs normally, the iClicker reads the EEPROM for its ID and transmits it along with the chosen letter to the base station.  Upon success, the base station sends a signal to the transceiver, which presumably triggers an interrupt on the iClicker.  This interrupt tells the iClicker of the success (the green LED blinks), and the iClicker stops sending votes.  If the signal is never received, the iClicker tries 4 times before giving up (the red LED blinks, signalling failure).
 
 Our objectives for the patch are as follows:
@@ -69,8 +88,8 @@ Our objectives for the patch are as follows:
 3. Change the delay between votes to something really small, so it votes as fast as possible.
 4. Perturb the EEPROM ID so each vote looks like it's coming from a unique iClicker.
 
-Interrupt (Objective #2)
-==========================
+### Interrupt (Objective #2)
+
 For AVR chips, the data space from 0x00 to 0x38 stores the interrupt vector table, which tells the program where to jump to when certain interrupts trigger.  See section 11.2 of http://www.atmel.com/images/doc7799.pdf for the ATMega8U2 table.  By checking the traces of the iClicker PCB we see that the transceiver is connected to INT0 on the chip, suggesting that INT0 is triggered when data is received.  INT0's vector is stored at 0x02 of flash memory, where we see this line:
 
 ```
@@ -97,8 +116,8 @@ This code stores the number 1 into register r5 and returns (and does some stuff 
 .data:0x000003de    1895    reti                        -Return from interrupt call-
 ```
 
-Scrambling the iClicker ID (Objective #4)
-============================================
+### Scrambling the iClicker ID (Objective #4)
+
 I don't remember how we figured this out but somehow we found the point where the actual pressed button press is read, at address 0x0522:
 
 ```
@@ -140,8 +159,8 @@ and then we modified the instruction at 0x0522 to call this:
 
 So now, every time the vote is sent out, each byte of the ID is incremented by one.  Strangely, when using this code on our test base station, the IDs don't increment but become seemingly pseudorandom, so probably this code is a little broken but anyway it gets the job done.
 
-Decreasing the Vote Delay and Voting Many Times (Objectives #1 and #3)
-==========================================================================
+### Decreasing the Vote Delay and Voting Many Times (Objectives #1 and #3)
+
 I don't know how we did this, it's been too long and our documentation sucks.  Here are the remaining lines that were changed according to a diff between the original and final versions:
 
 ```
@@ -171,12 +190,12 @@ I don't know how we did this, it's been too long and our documentation sucks.  H
     .data:0x00000f0a    e0ed    ldi r30, 0xD0 ; 208
 ```
 
-The patched line on 0x0f0a in particular is suspiciously labeled "Overclock Code," and probably speeds up the delay between votes.  Timer interrupts are triggered by byte overflow in AVR -- that is, an internal timer increments steadily and triggers once it goes past 255.  So changing 99 to a higher number, like 208, would decrease the delay by nearly 1/3rd ((255 - 208) / (255 - 99)).
+The patched line on `0x0f0a` in particular is suspiciously labeled "Overclock Code," and probably speeds up the delay between votes.  Timer interrupts are triggered by byte overflow in AVR -- that is, an internal timer increments steadily and triggers once it goes past 255.  So changing 99 to a higher number, like 208, would decrease the delay by nearly 1/3rd ((255 - 208) / (255 - 99)).
 
 It's possible some of those changes above were inconsequential.
 
-Uploading the firmware
-========================
+## Uploading the firmware
+
 To upload our patched file we convert the disassembly back to raw format and reupload with avrdude:
 
 ```
@@ -205,6 +224,5 @@ and pipes the result to `xxd -r` which reassembles the bytes into an AVR binary 
 
 If everything goes well, the iClicker should now vote indefinitely!
 
-References
-============
+## References
 http://www.atmel.com/images/doc7799.pdf
