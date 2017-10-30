@@ -1,0 +1,1988 @@
+    .data:0x00000000    13c0    rjmp .+38 ; 0x00000028       ; Reset / Initialize
+    .data:0x00000002    e9c1    rjmp .+978 ; 0x000003d6      ; Makes the green LED light up! :D
+    .data:0x00000004    fdcf    rjmp .-6 ; 0x00000000   
+    .data:0x00000006    fccf    rjmp .-8 ; 0x00000000   
+    .data:0x00000008    fbcf    rjmp .-10 ; 0x00000000  
+    .data:0x0000000a    facf    rjmp .-12 ; 0x00000000  
+    .data:0x0000000c    f9cf    rjmp .-14 ; 0x00000000  
+    .data:0x0000000e    f8cf    rjmp .-16 ; 0x00000000  
+    .data:0x00000010    f7cf    rjmp .-18 ; 0x00000000
+    .data:0x00000012    f6c1    rjmp .+1004 ; 0x00000400    ; Timer/Counter0 Overflow
+    .data:0x00000014    f5cf    rjmp .-22 ; 0x00000000  ; dst[i] = c
+    .data:0x00000016    f4cf    rjmp .-24 ; 0x00000000  
+    .data:0x00000018    f3cf    rjmp .-26 ; 0x00000000
+    .data:0x0000001a    f2cf    rjmp .-28 ; 0x00000000  
+    .data:0x0000001c    5ac2    rjmp .+1204 ; 0x000004d2    ; ADC complete, updates 0x0173 and 0x0174, clears ADEN, ADSC, ADFR, sets PB0 to 0
+    .data:0x0000001e    f0cf    rjmp .-32 ; 0x00000000  
+    .data:0x00000020    efcf    rjmp .-34 ; 0x00000000  
+    .data:0x00000022    eecf    rjmp .-36 ; 0x00000000  
+    .data:0x00000024    edcf    rjmp .-38 ; 0x00000000  
+    .data:0x00000026    0000    nop 
+    .data:0x00000028    f894    cli                     ; initialization
+    .data:0x0000002a    ee27    eor r30, r30    
+    .data:0x0000002c    ecbb    out 0x1c, r30 ; 28  
+    .data:0x0000002e    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000030    fbbf    out 0x3b, r31 ; 59  
+    .data:0x00000032    ebbf    out 0x3b, r30 ; 59  
+    .data:0x00000034    e5bf    out 0x35, r30 ; 53  
+    .data:0x00000036    f8e1    ldi r31, 0x18 ; 24      ; turns off watchdog
+    .data:0x00000038    f1bd    out 0x21, r31 ; 33      ; "
+    .data:0x0000003a    e1bd    out 0x21, r30 ; 33      ; "
+    .data:0x0000003c    8de0    ldi r24, 0x0D ; 13  
+    .data:0x0000003e    a2e0    ldi r26, 0x02 ; 2   
+    .data:0x00000040    bb27    eor r27, r27    
+    .data:0x00000042    ed93    st X+, r30  
+    .data:0x00000044    8a95    dec r24 
+    .data:0x00000046    e9f7    brne .-6 ; 0x00000042   
+    .data:0x00000048    80e0    ldi r24, 0x00 ; 0   
+    .data:0x0000004a    94e0    ldi r25, 0x04 ; 4   
+    .data:0x0000004c    a0e6    ldi r26, 0x60 ; 96  
+    .data:0x0000004e    ed93    st X+, r30  
+    .data:0x00000050    0197    sbiw r24, 0x01 ; 1  
+    .data:0x00000052    e9f7    brne .-6 ; 0x0000004e   
+    .data:0x00000054    e6e2    ldi r30, 0x26 ; 38  
+    .data:0x00000056    f0e0    ldi r31, 0x00 ; 0   
+    .data:0x00000058    8591    lpm r24, Z+ 
+    .data:0x0000005a    9591    lpm r25, Z+ 
+    .data:0x0000005c    0097    sbiw r24, 0x00 ; 0  
+    .data:0x0000005e    61f0    breq .+24 ; 0x00000078  
+    .data:0x00000060    a591    lpm r26, Z+ 
+    .data:0x00000062    b591    lpm r27, Z+ 
+    .data:0x00000064    0590    lpm r0, Z+  
+    .data:0x00000066    1590    lpm r1, Z+  
+    .data:0x00000068    bf01    movw r22, r30   
+    .data:0x0000006a    f001    movw r30, r0    
+    .data:0x0000006c    0590    lpm r0, Z+  
+    .data:0x0000006e    0d92    st X+, r0   
+    .data:0x00000070    0197    sbiw r24, 0x01 ; 1  
+    .data:0x00000072    e1f7    brne .-8 ; 0x0000006c   
+    .data:0x00000074    fb01    movw r30, r22   
+    .data:0x00000076    f0cf    rjmp .-32 ; 0x00000058  
+    .data:0x00000078    efe5    ldi r30, 0x5F ; 95  
+    .data:0x0000007a    edbf    out 0x3d, r30 ; 61  
+    .data:0x0000007c    e4e0    ldi r30, 0x04 ; 4   
+    .data:0x0000007e    eebf    out 0x3e, r30 ; 62  
+    .data:0x00000080    c0e6    ldi r28, 0x60 ; 96  
+    .data:0x00000082    d1e0    ldi r29, 0x01 ; 1   
+    .data:0x00000084    03c0    rjmp .+6 ; 0x0000008c   
+    .data:0x00000086    e0917201    lds r30, 0x0172 
+    .data:0x0000008a    0895    ret 
+    .data:0x0000008c    74d1    rcall .+744 ; 0x00000376    ; first jump out of initialization
+    .data:0x0000008e    efef    ldi r30, 0xFF ; 255 
+    .data:0x00000090    e0936201    sts 0x0162, r30         ; save 255 to 0x0162
+    .data:0x00000094    44fe    sbrs r4, 4                  ; if 16 bit in r4 is NOT set (clock overflowed):
+    .data:0x00000096    3cc0    rjmp .+120 ; 0x00000110     ;   some huge jump
+    .data:0x00000098    f894    cli                         ; if r4 is 16 (clock overflowed):
+    .data:0x0000009a    efee    ldi r30, 0xEF ; 239         ;   turn off 16 bit
+    .data:0x0000009c    4e22    and r4, r30                 ; " 
+    .data:0x0000009e    7894    sei                         ; "
+    .data:0x000000a0    e0916e01    lds r30, 0x016E         ; DECREMENT CODE: decrements/resets 0x016E:0x016F, 0x0171:0x0170
+    .data:0x000000a4    f0916f01    lds r31, 0x016F         ;   decrement 0x016E:0x016F
+    .data:0x000000a8    3197    sbiw r30, 0x01 ; 1          ;   "
+    .data:0x000000aa    e0936e01    sts 0x016E, r30         ;   "
+    .data:0x000000ae    f0936f01    sts 0x016F, r31         ;   "
+    .data:0x000000b2    3097    sbiw r30, 0x00 ; 0          ;   '
+    .data:0x000000b4    09f4    brne .+2 ; 0x000000b8       ;   '
+    .data:0x000000b6    b2d6    rcall .+3428 ; 0x00000e1c   ;   if 0x016E:0x016F is 0, call 0xe1c: sets 0x016E, 0x016F to 4 (or other init), 0
+    .data:0x000000b8    e0917001    lds r30, 0x0170         ;   decrement 0x0171:0x0170
+    .data:0x000000bc    f0917101    lds r31, 0x0171         ;   "
+    .data:0x000000c0    3197    sbiw r30, 0x01 ; 1          ;   "
+    .data:0x000000c2    e0937001    sts 0x0170, r30         ;   "
+    .data:0x000000c6    f0937101    sts 0x0171, r31         ;   "
+    .data:0x000000ca    3097    sbiw r30, 0x00 ; 0          ;   '
+    .data:0x000000cc    09f4    brne .+2 ; 0x000000d0       ;   if 0x0170:0x0171 is 0, call 0xe2a: resets 0x0170, 0x0171 to 5 (or other init), 0
+    .data:0x000000ce    add6    rcall .+3418 ; 0x00000e2a   ;   "
+    .data:0x000000d0    b3d6    rcall .+3430 ; 0x00000e38   ; if 0x016D:0x016C is 0, jump to 0x00e6
+    .data:0x000000d2    49f0    breq .+18 ; 0x000000e6      ; "
+    .data:0x000000d4    e0916c01    lds r30, 0x016C         ; else:
+    .data:0x000000d8    f0916d01    lds r31, 0x016D         ;   decrement 0x016D:0x016C
+    .data:0x000000dc    3197    sbiw r30, 0x01 ; 1          ;   "
+    .data:0x000000de    e0936c01    sts 0x016C, r30         ;   "
+    .data:0x000000e2    f0936d01    sts 0x016D, r31         ;   "
+    .data:0x000000e6    aed6    rcall .+3420 ; 0x00000e44   ; if 0x0169 is 0, jump to 0x0f4
+    .data:0x000000e8    29f0    breq .+10 ; 0x000000f4      ;   "
+    .data:0x000000ea    e0916901    lds r30, 0x0169         ; decrements 0x0169
+    .data:0x000000ee    e150    subi r30, 0x01 ; 1          ; "
+    .data:0x000000f0    e0936901    sts 0x0169, r30         ; "
+    .data:0x000000f4    0fd2    rcall .+1054 ; 0x00000514   Call Button interpretation method ; r30 now contains button code
+    .data:0x000000f6    e0936201    sts 0x0162, r30         Store r30 in 0x0162
+    .data:0x000000fa    a0916201    lds r26, 0x0162         Load 0x0162 into r26
+    .data:0x000000fe    a131    cpi r26, 0x11 ; 17          If r26 != 17
+    .data:0x00000100    29f4    brne .+10 ; 0x0000010c          Jump to 0x010c
+    .data:0x00000102    b2d2    rcall .+1380 ; 0x00000668   
+    .data:0x00000104    a3d6    rcall .+3398 ; 0x00000e4c   
+    .data:0x00000106    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000108    e0936301    sts 0x0163, r30 
+    .data:0x0000010c    bdd1    rcall .+890 ; 0x00000488    ; r26 was not 17
+    .data:0x0000010e    0bd3    rcall .+1558 ; 0x00000726   ;    jumps to 0x0fd6 
+    .data:0x00000110    a0916201    lds r26, 0x0162         ; JUMPED to when r4 is 0.
+    .data:0x00000114    a130    cpi r26, 0x01 ; 1           ; "
+    .data:0x00000116    09f4    brne .+2 ; 0x0000011a       ; if 0x0162 == 1:
+    .data:0x00000118    9dd6    rcall .+3386 ; 0x00000e54   ;   branch to 0x0e54
+    .data:0x0000011a    a0916201    lds r26, 0x0162         ;
+    .data:0x0000011e    a231    cpi r26, 0x12 ; 18          ; if 0x162 != 18:
+    .data:0x00000120    21f4    brne .+8 ; 0x0000012a       ;   jump to 0x012a 
+    .data:0x00000122    84d1    rcall .+776 ; 0x0000042c    
+    .data:0x00000124    fa93    st -Y, r31  
+    .data:0x00000126    ea93    st -Y, r30  
+    .data:0x00000128    5bd1    rcall .+694 ; 0x000003e0    
+    .data:0x0000012a    e0917201    lds r30, 0x0172         ; JUMPED to when 0x162 != 18   
+    .data:0x0000012e    e030    cpi r30, 0x00 ; 0   
+    .data:0x00000130    11f0    breq .+4 ; 0x00000136   
+    .data:0x00000132    95d6    rcall .+3370 ; 0x00000e5e   
+    .data:0x00000134    09f4    brne .+2 ; 0x00000138   
+    .data:0x00000136    01c0    rjmp .+2 ; 0x0000013a   
+    .data:0x00000138    8dd6    rcall .+3354 ; 0x00000e54   
+    .data:0x0000013a    a0916201    lds r26, 0x0162 
+    .data:0x0000013e    a331    cpi r26, 0x13 ; 19  
+    .data:0x00000140    99f4    brne .+38 ; 0x00000168  
+    .data:0x00000142    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x00000144    e0937201    sts 0x0172, r30 
+    .data:0x00000148    e3e0    ldi r30, 0x03 ; 3   
+    .data:0x0000014a    f0e0    ldi r31, 0x00 ; 0   
+    .data:0x0000014c    8cd6    rcall .+3352 ; 0x00000e66   
+    .data:0x0000014e    e1e8    ldi r30, 0x81 ; 129 
+    .data:0x00000150    fee8    ldi r31, 0x8E ; 142 
+    .data:0x00000152    8cd6    rcall .+3352 ; 0x00000e6c   
+    .data:0x00000154    efe0    ldi r30, 0x0F ; 15  
+    .data:0x00000156    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000158    89d6    rcall .+3346 ; 0x00000e6c   
+    .data:0x0000015a    e0ea    ldi r30, 0xA0 ; 160 
+    .data:0x0000015c    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x0000015e    86d6    rcall .+3340 ; 0x00000e6c   
+    .data:0x00000160    88d6    rcall .+3344 ; 0x00000e72   
+    .data:0x00000162    e8e0    ldi r30, 0x08 ; 8   
+    .data:0x00000164    e0936301    sts 0x0163, r30 
+    .data:0x00000168    e0916301    lds r30, 0x0163 
+    .data:0x0000016c    e030    cpi r30, 0x00 ; 0   
+    .data:0x0000016e    01f5    brne .+64 ; 0x000001b0  
+    .data:0x00000170    76d6    rcall .+3308 ; 0x00000e5e   
+    .data:0x00000172    e9f0    breq .+58 ; 0x000001ae  
+    .data:0x00000174    85d6    rcall .+3338 ; 0x00000e80   
+    .data:0x00000176    11f4    brne .+4 ; 0x0000017c   
+    .data:0x00000178    01e2    ldi r16, 0x21 ; 33  
+    .data:0x0000017a    0dc0    rjmp .+26 ; 0x00000196  
+    .data:0x0000017c    e430    cpi r30, 0x04 ; 4   
+    .data:0x0000017e    11f4    brne .+4 ; 0x00000184   
+    .data:0x00000180    02e2    ldi r16, 0x22 ; 34  
+    .data:0x00000182    09c0    rjmp .+18 ; 0x00000196  
+    .data:0x00000184    e830    cpi r30, 0x08 ; 8   
+    .data:0x00000186    11f4    brne .+4 ; 0x0000018c   
+    .data:0x00000188    03e2    ldi r16, 0x23 ; 35  
+    .data:0x0000018a    05c0    rjmp .+10 ; 0x00000196  
+    .data:0x0000018c    e032    cpi r30, 0x20 ; 32  
+    .data:0x0000018e    11f4    brne .+4 ; 0x00000194   
+    .data:0x00000190    04e2    ldi r16, 0x24 ; 36  
+    .data:0x00000192    01c0    rjmp .+2 ; 0x00000196   
+    .data:0x00000194    0fef    ldi r16, 0xFF ; 255 
+    .data:0x00000196    0f3f    cpi r16, 0xFF ; 255 
+    .data:0x00000198    51f0    breq .+20 ; 0x000001ae  
+    .data:0x0000019a    76d6    rcall .+3308 ; 0x00000e88   
+    .data:0x0000019c    e0936001    sts 0x0160, r30 
+    .data:0x000001a0    f0936101    sts 0x0161, r31 
+    .data:0x000001a4    74d6    rcall .+3304 ; 0x00000e8e   
+    .data:0x000001a6    76d6    rcall .+3308 ; 0x00000e94   
+    .data:0x000001a8    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x000001aa    e0936301    sts 0x0163, r30 
+    .data:0x000001ae    d1c0    rjmp .+418 ; 0x00000352 
+    .data:0x000001b0    e130    cpi r30, 0x01 ; 1   
+    .data:0x000001b2    31f5    brne .+76 ; 0x00000200  
+    .data:0x000001b4    54d6    rcall .+3240 ; 0x00000e5e   
+    .data:0x000001b6    19f1    breq .+70 ; 0x000001fe  
+    .data:0x000001b8    63d6    rcall .+3270 ; 0x00000e80   
+    .data:0x000001ba    11f4    brne .+4 ; 0x000001c0   
+    .data:0x000001bc    01e4    ldi r16, 0x41 ; 65  
+    .data:0x000001be    0dc0    rjmp .+26 ; 0x000001da  
+    .data:0x000001c0    e430    cpi r30, 0x04 ; 4   
+    .data:0x000001c2    11f4    brne .+4 ; 0x000001c8   
+    .data:0x000001c4    02e4    ldi r16, 0x42 ; 66  
+    .data:0x000001c6    09c0    rjmp .+18 ; 0x000001da  
+    .data:0x000001c8    e830    cpi r30, 0x08 ; 8   
+    .data:0x000001ca    11f4    brne .+4 ; 0x000001d0   
+    .data:0x000001cc    03e4    ldi r16, 0x43 ; 67  
+    .data:0x000001ce    05c0    rjmp .+10 ; 0x000001da  
+    .data:0x000001d0    e032    cpi r30, 0x20 ; 32  
+    .data:0x000001d2    11f4    brne .+4 ; 0x000001d8   
+    .data:0x000001d4    04e4    ldi r16, 0x44 ; 68  
+    .data:0x000001d6    01c0    rjmp .+2 ; 0x000001da   
+    .data:0x000001d8    0fef    ldi r16, 0xFF ; 255 
+    .data:0x000001da    0f3f    cpi r16, 0xFF ; 255 
+    .data:0x000001dc    81f0    breq .+32 ; 0x000001fe  
+    .data:0x000001de    e0916001    lds r30, 0x0160 
+    .data:0x000001e2    f0916101    lds r31, 0x0161 
+    .data:0x000001e6    fe2f    mov r31, r30    
+    .data:0x000001e8    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x000001ea    df01    movw r26, r30   
+    .data:0x000001ec    4dd6    rcall .+3226 ; 0x00000e88   
+    .data:0x000001ee    ea2b    or r30, r26 
+    .data:0x000001f0    fb2b    or r31, r27 
+    .data:0x000001f2    53d6    rcall .+3238 ; 0x00000e9a   
+    .data:0x000001f4    e2e0    ldi r30, 0x02 ; 2   
+    .data:0x000001f6    e0936501    sts 0x0165, r30 
+    .data:0x000001fa    56d6    rcall .+3244 ; 0x00000ea8   
+    .data:0x000001fc    59d6    rcall .+3250 ; 0x00000eb0   
+    .data:0x000001fe    a9c0    rjmp .+338 ; 0x00000352 
+    .data:0x00000200    e230    cpi r30, 0x02 ; 2   
+    .data:0x00000202    49f4    brne .+18 ; 0x00000216  
+    .data:0x00000204    e1e4    ldi r30, 0x41 ; 65  
+    .data:0x00000206    f1e2    ldi r31, 0x21 ; 33  
+    .data:0x00000208    48d6    rcall .+3216 ; 0x00000e9a   
+    .data:0x0000020a    2ad2    rcall .+1108 ; 0x00000660   
+    .data:0x0000020c    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x0000020e    e0936701    sts 0x0167, r30 
+    .data:0x00000212    eae0    ldi r30, 0x0A ; 10  
+    .data:0x00000214    9cc0    rjmp .+312 ; 0x0000034e 
+    .data:0x00000216    e330    cpi r30, 0x03 ; 3   
+    .data:0x00000218    21f4    brne .+8 ; 0x00000222   
+    .data:0x0000021a    4ed6    rcall .+3228 ; 0x00000eb8   
+    .data:0x0000021c    f3d4    rcall .+2534 ; 0x00000c04   
+    .data:0x0000021e    54d6    rcall .+3240 ; 0x00000ec8   
+    .data:0x00000220    96c0    rjmp .+300 ; 0x0000034e 
+    .data:0x00000222    e430    cpi r30, 0x04 ; 4   
+    .data:0x00000224    21f4    brne .+8 ; 0x0000022e   
+    .data:0x00000226    48d6    rcall .+3216 ; 0x00000eb8   
+    .data:0x00000228    8dd4    rcall .+2330 ; 0x00000b44   
+    .data:0x0000022a    4ed6    rcall .+3228 ; 0x00000ec8   
+    .data:0x0000022c    90c0    rjmp .+288 ; 0x0000034e 
+    .data:0x0000022e    e530    cpi r30, 0x05 ; 5   
+    .data:0x00000230    51f5    brne .+84 ; 0x00000286  
+    .data:0x00000232    02d6    rcall .+3076 ; 0x00000e38   
+    .data:0x00000234    d9f4    brne .+54 ; 0x0000026c  
+    .data:0x00000236    a0916601    lds r26, 0x0166 
+    .data:0x0000023a    af3f                         ;a330    cpi r26, 0x03 ; 3   
+    .data:0x0000023c    48f4    brcc .+18 ; 0x00000250  
+    .data:0x0000023e    e0916601    lds r30, 0x0166 
+    .data:0x00000242    ef5f    subi r30, 0xFF ; 255    
+    .data:0x00000244    e0936601    sts 0x0166, r30 
+    .data:0x00000248    e6e0    ldi r30, 0x06 ; 6   
+    .data:0x0000024a    e0936301    sts 0x0163, r30 
+    .data:0x0000024e    0cc0    rjmp .+24 ; 0x00000268  
+    .data:0x00000250    44d6    rcall .+3208 ; 0x00000eda   
+    .data:0x00000252    eed1    rcall .+988 ; 0x00000630    
+    .data:0x00000254    45d6    rcall .+3210 ; 0x00000ee0   
+    .data:0x00000256    a0916501    lds r26, 0x0165 
+    .data:0x0000025a    a230    cpi r26, 0x02 ; 2   
+    .data:0x0000025c    11f4    brne .+4 ; 0x00000262   
+    .data:0x0000025e    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000260    01c0    rjmp .+2 ; 0x00000264   
+    .data:0x00000262    eae0    ldi r30, 0x0A ; 10  
+    .data:0x00000264    e0936801    sts 0x0168, r30 
+    .data:0x00000268    55d4    rcall .+2218 ; 0x00000b14   
+    .data:0x0000026a    0cc0    rjmp .+24 ; 0x00000284  
+    .data:0x0000026c    3dd6    rcall .+3194 ; 0x00000ee8   
+    .data:0x0000026e    51f4    brne .+20 ; 0x00000284  
+    .data:0x00000270    00d6    rcall .+3072 ; 0x00000e72   
+    .data:0x00000272    5524    eor r5, r5  
+    .data:0x00000274    3cd6    rcall .+3192 ; 0x00000eee   
+    .data:0x00000276    3ed6    rcall .+3196 ; 0x00000ef4   
+    .data:0x00000278    33d6    rcall .+3174 ; 0x00000ee0   
+    .data:0x0000027a    eae0    ldi r30, 0x0A ; 10  
+    .data:0x0000027c    e0936801    sts 0x0168, r30 
+    .data:0x00000280    49d4    rcall .+2194 ; 0x00000b14   
+    .data:0x00000282    eed1    rcall .+988 ; 0x00000660    
+    .data:0x00000284    66c0    rjmp .+204 ; 0x00000352     ;
+    .data:0x00000286    e630    cpi r30, 0x06 ; 6           ; if r30 != 6:
+    .data:0x00000288    c1f4    brne .+48 ; 0x000002ba      ;   copy 0x0166 to r26
+    .data:0x0000028a    a0916601    lds r26, 0x0166         ; if 0x0166 != 2:
+    .data:0x0000028e    a230    cpi r26, 0x02 ; 2           ;   '
+    .data:0x00000290    51f4    brne .+20 ; 0x000002a6      ;   jump to 0x02a6, 0x0170!!!!! 
+    .data:0x00000292    a0916e01    lds r26, 0x016E         ; CHECKS whether 0x016E is 1 AND 0x016F is 0
+    .data:0x00000296    b0916f01    lds r27, 0x016F         ; 
+    .data:0x0000029a    a130    cpi r26, 0x01 ; 1           ; 
+    .data:0x0000029c    e0e0    ldi r30, 0x00 ; 0           ; 
+    .data:0x0000029e    be07    cpc r27, r30                ; 
+    .data:0x000002a0    09f4    brne .+2 ; 0x000002a4       ; if word == 1:
+    .data:0x000002a2    2bd6    rcall .+3158 ; 0x00000efa   ;   rcall to 0x0efa
+    .data:0x000002a4    09c0    rjmp .+18 ; 0x000002b8      ; JUMP to 0x02b8 -> 0x0352 
+    .data:0x000002a6    a0917001    lds r26, 0x0170         ; CHECKS whether 0x0170 is 1 and 0x0171 is 0 
+    .data:0x000002aa    b0917101    lds r27, 0x0171         ;
+    .data:0x000002ae    a130    cpi r26, 0x01 ; 1           ; 
+    .data:0x000002b0    e0e0    ldi r30, 0x00 ; 0           ;
+    .data:0x000002b2    be07    cpc r27, r30                ; 
+    .data:0x000002b4    09f4    brne .+2 ; 0x000002b8       ; if word == 1:
+    .data:0x000002b6    21d6    rcall .+3138 ; 0x00000efa   ;   rcall to 0x0efa
+    .data:0x000002b8    4cc0    rjmp .+152 ; 0x00000352     ; JUMP to 0x0352
+    .data:0x000002ba    e730    cpi r30, 0x07 ; 7           ;
+    .data:0x000002bc    49f4    brne .+18 ; 0x000002d0  
+    .data:0x000002be    e0918601    lds r30, 0x0186 
+    .data:0x000002c2    e030    cpi r30, 0x00 ; 0   
+    .data:0x000002c4    21f4    brne .+8 ; 0x000002ce   
+    .data:0x000002c6    e0916801    lds r30, 0x0168 
+    .data:0x000002ca    e0936301    sts 0x0163, r30 
+    .data:0x000002ce    41c0    rjmp .+130 ; 0x00000352 
+    .data:0x000002d0    ea30    cpi r30, 0x0A ; 10  
+    .data:0x000002d2    39f5    brne .+78 ; 0x00000322  
+    .data:0x000002d4    c4d5    rcall .+2952 ; 0x00000e5e   
+    .data:0x000002d6    21f1    breq .+72 ; 0x00000320  
+    .data:0x000002d8    d3d5    rcall .+2982 ; 0x00000e80   
+    .data:0x000002da    11f4    brne .+4 ; 0x000002e0   
+    .data:0x000002dc    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x000002de    11c0    rjmp .+34 ; 0x00000302  
+    .data:0x000002e0    e430    cpi r30, 0x04 ; 4   
+    .data:0x000002e2    11f4    brne .+4 ; 0x000002e8   
+    .data:0x000002e4    e5e0    ldi r30, 0x05 ; 5   
+    .data:0x000002e6    0dc0    rjmp .+26 ; 0x00000302  
+    .data:0x000002e8    e830    cpi r30, 0x08 ; 8   
+    .data:0x000002ea    11f4    brne .+4 ; 0x000002f0   
+    .data:0x000002ec    ede0    ldi r30, 0x0D ; 13  
+    .data:0x000002ee    09c0    rjmp .+18 ; 0x00000302  
+    .data:0x000002f0    e032    cpi r30, 0x20 ; 32  
+    .data:0x000002f2    11f4    brne .+4 ; 0x000002f8   
+    .data:0x000002f4    eee0    ldi r30, 0x0E ; 14  
+    .data:0x000002f6    05c0    rjmp .+10 ; 0x00000302  
+    .data:0x000002f8    e031    cpi r30, 0x10 ; 16  
+    .data:0x000002fa    11f4    brne .+4 ; 0x00000300   
+    .data:0x000002fc    eae0    ldi r30, 0x0A ; 10  
+    .data:0x000002fe    01c0    rjmp .+2 ; 0x00000302   
+    .data:0x00000300    efef    ldi r30, 0xFF ; 255 
+    .data:0x00000302    e0936501    sts 0x0165, r30 
+    .data:0x00000306    a0916501    lds r26, 0x0165 
+    .data:0x0000030a    af3f    cpi r26, 0xFF ; 255 
+    .data:0x0000030c    49f0    breq .+18 ; 0x00000320  
+    .data:0x0000030e    e0916701    lds r30, 0x0167 
+    .data:0x00000312    e030    cpi r30, 0x00 ; 0   
+    .data:0x00000314    19f0    breq .+6 ; 0x0000031c   
+    .data:0x00000316    c8d5    rcall .+2960 ; 0x00000ea8   
+    .data:0x00000318    99d5    rcall .+2866 ; 0x00000e4c   
+    .data:0x0000031a    01c0    rjmp .+2 ; 0x0000031e   
+    .data:0x0000031c    eed5    rcall .+3036 ; 0x00000efa   
+    .data:0x0000031e    c8d5    rcall .+2960 ; 0x00000eb0   
+    .data:0x00000320    18c0    rjmp .+48 ; 0x00000352  
+    .data:0x00000322    e830    cpi r30, 0x08 ; 8   
+    .data:0x00000324    49f4    brne .+18 ; 0x00000338  
+    .data:0x00000326    70d1    rcall .+736 ; 0x00000608    
+    .data:0x00000328    e0916401    lds r30, 0x0164 
+    .data:0x0000032c    e560    ori r30, 0x05 ; 5   
+    .data:0x0000032e    ea93    st -Y, r30  
+    .data:0x00000330    09d4    rcall .+2066 ; 0x00000b44   
+    .data:0x00000332    5524    eor r5, r5  
+    .data:0x00000334    e9e0    ldi r30, 0x09 ; 9   
+    .data:0x00000336    0bc0    rjmp .+22 ; 0x0000034e  
+    .data:0x00000338    e930    cpi r30, 0x09 ; 9   
+    .data:0x0000033a    31f4    brne .+12 ; 0x00000348  
+    .data:0x0000033c    d5d5    rcall .+2986 ; 0x00000ee8   
+    .data:0x0000033e    19f4    brne .+6 ; 0x00000346   
+    .data:0x00000340    5524    eor r5, r5  
+    .data:0x00000342    a5d5    rcall .+2890 ; 0x00000e8e   
+    .data:0x00000344    d7d5    rcall .+2990 ; 0x00000ef4   
+    .data:0x00000346    05c0    rjmp .+10 ; 0x00000352  
+    .data:0x00000348    c8d5    rcall .+2960 ; 0x00000eda   
+    .data:0x0000034a    a4d5    rcall .+2888 ; 0x00000e94   
+    .data:0x0000034c    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x0000034e    e0936301    sts 0x0163, r30 
+    .data:0x00000352    78d5    rcall .+2800 ; 0x00000e44   
+    .data:0x00000354    71f4    brne .+28 ; 0x00000372  
+    .data:0x00000356    e0916a01    lds r30, 0x016A 
+    .data:0x0000035a    f0916b01    lds r31, 0x016B 
+    .data:0x0000035e    3197    sbiw r30, 0x01 ; 1  
+    .data:0x00000360    e0936a01    sts 0x016A, r30 
+    .data:0x00000364    f0936b01    sts 0x016B, r31 
+    .data:0x00000368    3097    sbiw r30, 0x00 ; 0  
+    .data:0x0000036a    11f4    brne .+4 ; 0x00000370   
+    .data:0x0000036c    73d5    rcall .+2790 ; 0x00000e54   
+    .data:0x0000036e    01c0    rjmp .+2 ; 0x00000372   
+    .data:0x00000370    c8d5    rcall .+2960 ; 0x00000f02   
+    .data:0x00000372    8dce    rjmp .-742 ; 0x0000008e 
+    .data:0x00000374    ffcf    rjmp .-2 ; 0x00000374   
+    .data:0x00000376    f894    cli 
+    .data:0x00000378    eee2    ldi r30, 0x2E ; 46  
+    .data:0x0000037a    e7bb    out 0x17, r30 ; 23  
+    .data:0x0000037c    e2e0    ldi r30, 0x02 ; 2   
+    .data:0x0000037e    e8bb    out 0x18, r30 ; 24  
+    .data:0x00000380    e8ef    ldi r30, 0xF8 ; 248 
+    .data:0x00000382    e1bb    out 0x11, r30 ; 17  
+    .data:0x00000384    e2bb    out 0x12, r30 ; 18  
+    .data:0x00000386    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000388    e4bb    out 0x14, r30 ; 20  
+    .data:0x0000038a    efe3    ldi r30, 0x3F ; 63  
+    .data:0x0000038c    e5bb    out 0x15, r30 ; 21  
+    .data:0x0000038e    69d0    rcall .+210 ; 0x00000462    
+    .data:0x00000390    2dd1    rcall .+602 ; 0x000005ec    
+    .data:0x00000392    bad0    rcall .+372 ; 0x00000508    
+    .data:0x00000394    4fd0    rcall .+158 ; 0x00000434    
+    .data:0x00000396    7ad2    rcall .+1268 ; 0x0000088c   
+    .data:0x00000398    2cd0    rcall .+88 ; 0x000003f2 
+    .data:0x0000039a    4424    eor r4, r4  
+    .data:0x0000039c    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x0000039e    e0936c01    sts 0x016C, r30 
+    .data:0x000003a2    e0936d01    sts 0x016D, r30 
+    .data:0x000003a6    add5    rcall .+2906 ; 0x00000f02   
+    .data:0x000003a8    ece2    ldi r30, 0x2C ; 44  
+    .data:0x000003aa    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x000003ac    e0936a01    sts 0x016A, r30 
+    .data:0x000003b0    f0936b01    sts 0x016B, r31 
+    .data:0x000003b4    33d5    rcall .+2662 ; 0x00000e1c   
+    .data:0x000003b6    39d5    rcall .+2674 ; 0x00000e2a   
+    .data:0x000003b8    49d5    rcall .+2706 ; 0x00000e4c   
+    .data:0x000003ba    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x000003bc    e0936401    sts 0x0164, r30 
+    .data:0x000003c0    add4    rcall .+2394 ; 0x00000d1c   
+    .data:0x000003c2    e2e0    ldi r30, 0x02 ; 2   
+    .data:0x000003c4    e0936301    sts 0x0163, r30 
+    .data:0x000003c8    e3e0    ldi r30, 0x03 ; 3   
+    .data:0x000003ca    e5bf    out 0x35, r30 ; 53  
+    .data:0x000003cc    e0e4    ldi r30, 0x40 ; 64  
+    .data:0x000003ce    eabf    out 0x3a, r30 ; 58  
+    .data:0x000003d0    ebbf    out 0x3b, r30 ; 59  
+    .data:0x000003d2    7894    sei 
+    .data:0x000003d4    0895    ret 
+    .data:0x000003d6    ea93    st -Y, r30                  Store r30 in y-1  
+    .data:0x000003d8    e1e0    ldi r30, 0x01 ; 1           Load 1 into r30
+    .data:0x000003da    0000    nop;5e2e    mov r5, r30                 Load r30 into r5
+    .data:0x000003dc    e991    ld r30, Y+                  Load y+1 into r30
+    .data:0x000003de    1895    reti                        -Return from interrupt call-
+    .data:0x000003e0    f894    cli 
+    .data:0x000003e2    39d1    rcall .+626 ; 0x00000656    
+    .data:0x000003e4    e881    ld r30, Y   
+    .data:0x000003e6    f981    ldd r31, Y+1 ; 0x01 
+    .data:0x000003e8    3097    sbiw r30, 0x00 ; 0  
+    .data:0x000003ea    09f0    breq .+2 ; 0x000003ee   
+    .data:0x000003ec    3cd5    rcall .+2680 ; 0x00000e66   
+    .data:0x000003ee    c198    cbi 0x18, 1 ; 24    
+    .data:0x000003f0    ffcf    rjmp .-2 ; 0x000003f0   
+    .data:0x000003f2    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x000003f4    e8bf    out 0x38, r30 ; 56  
+    .data:0x000003f6    e9bf    out 0x39, r30 ; 57  
+    .data:0x000003f8    e4e0    ldi r30, 0x04 ; 4   
+    .data:0x000003fa    e3bf    out 0x33, r30 ; 51  
+    .data:0x000003fc    86d5    rcall .+2828 ; 0x00000f0a   
+    .data:0x000003fe    0895    ret 
+    .data:0x00000400    ea93    st -Y, r30                 ; On Timer/Counter0 Overflow, push stack...
+    .data:0x00000402    efb7    in r30, 0x3f ; 63          ; Push ADC status register to stack
+    .data:0x00000404    ea93    st -Y, r30  
+    .data:0x00000406    81d5    rcall .+2818 ; 0x00000f0a  ; Write 99 to Timer/Counter0
+    .data:0x00000408    e0e1    ldi r30, 0x10 ; 16  
+    .data:0x0000040a    4e2a    or r4, r30                 ; "Or" r4 with 16
+    .data:0x0000040c    e991    ld r30, Y+                 ; restore stack
+    .data:0x0000040e    efbf    out 0x3f, r30 ; 63         ; "
+    .data:0x00000410    e991    ld r30, Y+                 ; "
+    .data:0x00000412    1895    reti    
+    .data:0x00000414    a0e0    ldi r26, 0x00 ; 0   
+    .data:0x00000416    b0e0    ldi r27, 0x00 ; 0   
+    .data:0x00000418    5cd6    rcall .+3256 ; 0x000010d2   
+    .data:0x0000041a    0895    ret 
+    .data:0x0000041c    a1e0    ldi r26, 0x01 ; 1   
+    .data:0x0000041e    b0e0    ldi r27, 0x00 ; 0   
+    .data:0x00000420    58d6    rcall .+3248 ; 0x000010d2   
+    .data:0x00000422    0895    ret 
+    .data:0x00000424    a2e0    ldi r26, 0x02 ; 2   
+    .data:0x00000426    b0e0    ldi r27, 0x00 ; 0   
+    .data:0x00000428    54d6    rcall .+3240 ; 0x000010d2   
+    .data:0x0000042a    0895    ret 
+    .data:0x0000042c    a0e4    ldi r26, 0x40 ; 64  
+    .data:0x0000042e    b0e0    ldi r27, 0x00 ; 0   
+    .data:0x00000430    4cd6    rcall .+3224 ; 0x000010ca   
+    .data:0x00000432    0895    ret 
+    .data:0x00000434    0a93    st -Y, r16  
+    .data:0x00000436    e9e5    ldi r30, 0x59 ; 89  
+    .data:0x00000438    edb9    out 0x0d, r30 ; 13  
+    .data:0x0000043a    0eb1    in r16, 0x0e ; 14   
+    .data:0x0000043c    0fb1    in r16, 0x0f ; 15   
+    .data:0x0000043e    00e0    ldi r16, 0x00 ; 0   
+    .data:0x00000440    c29a    sbi 0x18, 2 ; 24    
+    .data:0x00000442    0991    ld r16, Y+  
+    .data:0x00000444    0895    ret 
+    .data:0x00000446    0a93    st -Y, r16  
+    .data:0x00000448    f894    cli 
+    .data:0x0000044a    e981    ldd r30, Y+1 ; 0x01 
+    .data:0x0000044c    efb9    out 0x0f, r30 ; 15  
+    .data:0x0000044e    eeb1    in r30, 0x0e ; 14   
+    .data:0x00000450    e078    andi r30, 0x80 ; 128    
+    .data:0x00000452    e038    cpi r30, 0x80 ; 128 
+    .data:0x00000454    e1f7    brne .-8 ; 0x0000044e   
+    .data:0x00000456    0eb1    in r16, 0x0e ; 14   
+    .data:0x00000458    0fb1    in r16, 0x0f ; 15   
+    .data:0x0000045a    7894    sei 
+    .data:0x0000045c    e02f    mov r30, r16    
+    .data:0x0000045e    0881    ld r16, Y   
+    .data:0x00000460    4fc3    rjmp .+1694 ; 0x00000b00    
+    .data:0x00000462    e7e4    ldi r30, 0x47 ; 71  
+    .data:0x00000464    e7b9    out 0x07, r30 ; 7   
+    .data:0x00000466    eee0    ldi r30, 0x0E ; 14  
+    .data:0x00000468    e6b9    out 0x06, r30 ; 6       ; Note, this sets the ADC to 14!
+    .data:0x0000046a    b89a    sbi 0x17, 0 ; 23    
+    .data:0x0000046c    c098    cbi 0x18, 0 ; 24    
+    .data:0x0000046e    efef    ldi r30, 0xFF ; 255 
+    .data:0x00000470    f3e0    ldi r31, 0x03 ; 3   
+    .data:0x00000472    e0937301    sts 0x0173, r30     ; resetting r30 to 255 ; NOP'ing these did nothing, weird
+    .data:0x00000476    f0937401    sts 0x0174, r31     ; resetting r31 to 3
+    .data:0x0000047a    e4e4    ldi r30, 0x44 ; 68  
+    .data:0x0000047c    f6e1    ldi r31, 0x16 ; 22  
+    .data:0x0000047e    e0937501    sts 0x0175, r30 
+    .data:0x00000482    f0937601    sts 0x0176, r31 
+    .data:0x00000486    0895    ret 
+    .data:0x00000488    e0917501    lds r30, 0x0175     ; start some bullshit 1 ; increment Z pointer by 1
+    .data:0x0000048c    f0917601    lds r31, 0x0176     ; "
+    .data:0x00000490    3196    adiw r30, 0x01 ; 1      ; "
+    .data:0x00000492    e0937501    sts 0x0175, r30     ; "
+    .data:0x00000496    f0937601    sts 0x0176, r31     ; "
+    .data:0x0000049a    a0917501    lds r26, 0x0175 
+    .data:0x0000049e    b0917601    lds r27, 0x0176 
+    .data:0x000004a2    af36    cpi r26, 0x6F ; 111 
+    .data:0x000004a4    e7e1    ldi r30, 0x17 ; 23  
+    .data:0x000004a6    be07    cpc r27, r30    
+    .data:0x000004a8    0000    nop                     ;19f4    brne .+6 ; 0x000004b0   if 0x0175:0x0176 is equal to 23:111
+    .data:0x000004aa    c09a    sbi 0x18, 0 ; 24    
+    .data:0x000004ac    379a    sbi 0x06, 7 ; 6         ; enables the ADC by turning on ADCEN
+    .data:0x000004ae    10c0    rjmp .+32 ; 0x000004d0  
+    .data:0x000004b0    a0917501    lds r26, 0x0175 
+    .data:0x000004b4    b0917601    lds r27, 0x0176 
+    .data:0x000004b8    a037    cpi r26, 0x70 ; 112 
+    .data:0x000004ba    e7e1    ldi r30, 0x17 ; 23  
+    .data:0x000004bc    be07    cpc r27, r30    
+    .data:0x000004be    40f0    brcs .+16 ; 0x000004d0  ; if r27:r26 < 112:23, then jump to 4d0
+    .data:0x000004c0    e0e0    ldi r30, 0x00 ; 0       ; otherwise, set 0x0175, 0x0176 to 0
+    .data:0x000004c2    e0937501    sts 0x0175, r30     ;
+    .data:0x000004c6    e0937601    sts 0x0176, r30     ;
+    .data:0x000004ca    e6b1    in r30, 0x06 ; 6        ; sets ADCEN, ADCSC
+    .data:0x000004cc    e06c    ori r30, 0xC0 ; 192     ; "
+    .data:0x000004ce    e6b9    out 0x06, r30 ; 6       ; "
+    .data:0x000004d0    0895    ret                     ; end some bullshit 1
+    .data:0x000004d2    ea93    st -Y, r30         ; ADC complete
+    .data:0x000004d4    fa93    st -Y, r31  
+    .data:0x000004d6    efb7    in r30, 0x3f ; 63   ; push status register to stack
+    .data:0x000004d8    ea93    st -Y, r30  
+    .data:0x000004da    e4b1    in r30, 0x04 ; 4    ; read ADC low
+    .data:0x000004dc    f5b1    in r31, 0x05 ; 5    ; read ADC high
+    .data:0x000004de    e0937301    sts 0x0173, r30 ; save ADC low to 0x173
+    .data:0x000004e2    f0937401    sts 0x0174, r31 ; save ADC high to 0x174
+    .data:0x000004e6    e6b1    in r30, 0x06 ; 6    ; clears ADEN, ADSC, ADFR
+    .data:0x000004e8    ef73    andi r30, 0x3F ; 63 ; "
+    .data:0x000004ea    e6b9    out 0x06, r30 ; 6   ; "
+    .data:0x000004ec    c098    cbi 0x18, 0 ; 24    ; set PB0 to 0
+    .data:0x000004ee    e991    ld r30, Y+          ; restore stack
+    .data:0x000004f0    efbf    out 0x3f, r30 ; 63  ; restore status register
+    .data:0x000004f2    f991    ld r31, Y+          ; "
+    .data:0x000004f4    e991    ld r30, Y+          ; " 
+    .data:0x000004f6    1895    reti                ; end
+    .data:0x000004f8    a0917301    lds r26, 0x0173         ; sets r30 = 1 if r31:30 > r27:r26
+    .data:0x000004fc    b0917401    lds r27, 0x0174 
+    .data:0x00000500    ece1    ldi r30, 0x1C ; 28  
+    .data:0x00000502    f2e0    ldi r31, 0x02 ; 2   
+    .data:0x00000504    dcd5    rcall .+3000 ; 0x000010be   ; r30 = 1 if r31:30 > r27:r26
+    .data:0x00000506    0895    ret                         ; end
+    .data:0x00000508    03d5    rcall .+2566 ; 0x00000f10   
+    .data:0x0000050a    e0937701    sts 0x0177, r30 
+    .data:0x0000050e    04d5    rcall .+2568 ; 0x00000f18   
+    .data:0x00000510    07d5    rcall .+2574 ; 0x00000f20   
+    .data:0x00000512    0895    ret 
+    .data:0x00000514    f6d5    rcall .+3052 ; 0x00001102   Beginning of call to get button. Store r17 and r16 in Y - 1 and Y - 2 ; push r17 and r16 onto stack
+    .data:0x00000516    1fef    ldi r17, 0xFF ; 255         Load 255 into r17
+    .data:0x00000518    e0917801    lds r30, 0x0178         Load value in 0x0178 into r30
+    .data:0x0000051c    ef5f    subi r30, 0xFF ; 255        Subtract 255 from r30
+    .data:0x0000051e    e0937801    sts 0x0178, r30         Store the new value in 0x0178
+    .data:0x00000522    01d6    rcall ? ; 0x1126            <--Normally just gets button input. Now does other stuff.
+    .data:0x00000524    ef73    andi r30, 0x3F ; 63         And the button value with 63
+    .data:0x00000526    afe3    ldi r26, 0x3F ; 63
+    .data:0x00000528    ea27    eor r30, r26                XOR r30 with 63
+    .data:0x0000052a    0e2f    mov r16, r30                Move the masked value to r16
+    .data:0x0000052c    e0917a01    lds r30, 0x017A         Load value in 0x017A into r30
+    .data:0x00000530    e030    cpi r30, 0x00 ; 0           If the 0x017A value == 0
+    .data:0x00000532    39f1    breq .+78 ; 0x00000582          Jump to 0x582
+    .data:0x00000534    0130    cpi r16, 0x01 ; 1           If the masked button value != 1
+    .data:0x00000536    29f4    brne .+10 ; 0x00000542          Jump to 0x542
+    .data:0x00000538    fad4    rcall .+2548 ; 0x00000f2e   If 0x17A -= 255 > 200
+    .data:0x0000053a    10f4    brcc .+4 ; 0x00000540           Jump to 0x582
+    .data:0x0000053c    02d5    rcall .+2564 ; 0x00000f42   Put 0 in both 0x017A and 0x0179 and put 17 in r30
+    .data:0x0000053e    54c0    rjmp .+168 ; 0x000005e8     Jump to 5e8
+    .data:0x00000540    20c0    rjmp .+64 ; 0x00000582
+    .data:0x00000542    0930    cpi r16, 0x09 ; 9           If the masked button value != 9
+    .data:0x00000544    29f4    brne .+10 ; 0x00000550          Jump to 0x550
+    .data:0x00000546    04d5    rcall .+2568 ; 0x00000f50   If 0x0179 != 0
+    .data:0x00000548    11f4    brne .+4 ; 0x0000054e           Jump to 0x582
+    .data:0x0000054a    e2e1    ldi r30, 0x12 ; 18          Load 18 into r30
+    .data:0x0000054c    4dc0    rjmp .+154 ; 0x000005e8     Jump to 5e8
+    .data:0x0000054e    19c0    rjmp .+50 ; 0x00000582  
+    .data:0x00000550    0132    cpi r16, 0x21 ; 33          If the masked button value != 33
+    .data:0x00000552    29f4    brne .+10 ; 0x0000055e          Jump to 0x55e
+    .data:0x00000554    ecd4    rcall .+2520 ; 0x00000f2e   If 0x17A -= 255 > 200
+    .data:0x00000556    10f4    brcc .+4 ; 0x0000055c           Jump to 0x582
+    .data:0x00000558    f4d4    rcall .+2536 ; 0x00000f42   Put 0 in both 0x017A and 0x0179 and put 17 in r30
+    .data:0x0000055a    46c0    rjmp .+140 ; 0x000005e8     Jump to 5e8
+    .data:0x0000055c    12c0    rjmp .+36 ; 0x00000582  
+    .data:0x0000055e    0332    cpi r16, 0x23 ; 35          If the masked button value != 35
+    .data:0x00000560    31f4    brne .+12 ; 0x0000056e          Jump to 0x56e
+    .data:0x00000562    f6d4    rcall .+2540 ; 0x00000f50   If 0x0179 != 0
+    .data:0x00000564    19f4    brne .+6 ; 0x0000056c           Jump to 0x582
+    .data:0x00000566    dcd4    rcall .+2488 ; 0x00000f20   Put 1 in 0x0179 and 0 into 0x017A
+    .data:0x00000568    e3e1    ldi r30, 0x13 ; 19          Put 19 in r30
+    .data:0x0000056a    3ec0    rjmp .+124 ; 0x000005e8     Jump to 5e8
+    .data:0x0000056c    0ac0    rjmp .+20 ; 0x00000582  
+    .data:0x0000056e    e0e0    ldi r30, 0x00 ; 0           Load 0 into r30 
+    .data:0x00000570    e0937a01    sts 0x017A, r30         Store r30 in 0x017A
+    .data:0x00000574    edd4    rcall .+2522 ; 0x00000f50   If 0x0179 != 0
+    .data:0x00000576    11f4    brne .+4 ; 0x0000057c           Jump to 0x57c 
+    .data:0x00000578    e1e0    ldi r30, 0x01 ; 1           Load 1 into r30
+    .data:0x0000057a    36c0    rjmp .+108 ; 0x000005e8     Jump to 5e8
+    .data:0x0000057c    e0e0    ldi r30, 0x00 ; 0           Load 0 into r30 
+    .data:0x0000057e    e0937901    sts 0x0179, r30         Store r30 in 0x0179
+    .data:0x00000582    ead4    rcall .+2516 ; 0x00000f58   If 0x0177 != masked button value   
+    .data:0x00000584    31f4    brne .+12 ; 0x00000592          Jump to 0x592
+    .data:0x00000586    c8d4    rcall .+2448 ; 0x00000f18   Load 0 into r30 and store in 0x178   
+    .data:0x00000588    0030    cpi r16, 0x00 ; 0           If masked button value != 0
+    .data:0x0000058a    19f4    brne .+6 ; 0x00000592           Jump to 0x592
+    .data:0x0000058c    c1d4    rcall .+2434 ; 0x00000f10   Load 0 into r30 and store in 0x17B
+    .data:0x0000058e    e0937901    sts 0x0179, r30 
+    .data:0x00000592    e2d4    rcall .+2500 ; 0x00000f58   
+    .data:0x00000594    21f0    breq .+8 ; 0x0000059e   
+    .data:0x00000596    a0917801    lds r26, 0x0178 
+    .data:0x0000059a    a330    cpi r26, 0x03 ; 3   
+    .data:0x0000059c    08f4    brcc .+2 ; 0x000005a0   
+    .data:0x0000059e    23c0    rjmp .+70 ; 0x000005e6  
+    .data:0x000005a0    bbd4    rcall .+2422 ; 0x00000f18   
+    .data:0x000005a2    00937701    sts 0x0177, r16 
+    .data:0x000005a6    e0917b01    lds r30, 0x017B 
+    .data:0x000005aa    e030    cpi r30, 0x00 ; 0   
+    .data:0x000005ac    e1f4    brne .+56 ; 0x000005e6  
+    .data:0x000005ae    0130    cpi r16, 0x01 ; 1       ; if 1 , probably some sort of idle state
+    .data:0x000005b0    21f4    brne .+8 ; 0x000005ba   
+    .data:0x000005b2    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x000005b4    e0937a01    sts 0x017A, r30     ; set 0x017A to 1
+    .data:0x000005b8    13c0    rjmp .+38 ; 0x000005e0  
+    .data:0x000005ba    0230    cpi r16, 0x02 ; 2       ; if A
+    .data:0x000005bc    11f4    brne .+4 ; 0x000005c2   
+    .data:0x000005be    12e0    ldi r17, 0x02 ; 2   
+    .data:0x000005c0    0fc0    rjmp .+30 ; 0x000005e0  
+    .data:0x000005c2    0430    cpi r16, 0x04 ; 4       ; if B
+    .data:0x000005c4    11f4    brne .+4 ; 0x000005ca   
+    .data:0x000005c6    14e0    ldi r17, 0x04 ; 4   
+    .data:0x000005c8    0bc0    rjmp .+22 ; 0x000005e0  
+    .data:0x000005ca    0830    cpi r16, 0x08 ; 8       ; if C
+    .data:0x000005cc    11f4    brne .+4 ; 0x000005d2   
+    .data:0x000005ce    18e0    ldi r17, 0x08 ; 8   
+    .data:0x000005d0    07c0    rjmp .+14 ; 0x000005e0  
+    .data:0x000005d2    0032    cpi r16, 0x20 ; 32      ; if D
+    .data:0x000005d4    11f4    brne .+4 ; 0x000005da   
+    .data:0x000005d6    10e2    ldi r17, 0x20 ; 32  
+    .data:0x000005d8    03c0    rjmp .+6 ; 0x000005e0   
+    .data:0x000005da    0031    cpi r16, 0x10 ; 16      ; if E
+    .data:0x000005dc    09f4    brne .+2 ; 0x000005e0   
+    .data:0x000005de    10e1    ldi r17, 0x10 ; 16  
+    .data:0x000005e0    e1e0    ldi r30, 0x01 ; 1       ; after button checked, r17 stores button, jumps here
+    .data:0x000005e2    e0937b01    sts 0x017B, r30     ; set 0x017B to 1
+    .data:0x000005e6    e12f    mov r30, r17            ; r30 contains letter code
+    .data:0x000005e8    96d5    rcall .+2860 ; 0x00001116   ; sets r16, r17 to Y+
+    .data:0x000005ea    0895    ret 
+    .data:0x000005ec    b9d4    rcall .+2418 ; 0x00000f60   
+    .data:0x000005ee    00d1    rcall .+512 ; 0x000007f0    
+    .data:0x000005f0    bad4    rcall .+2420 ; 0x00000f66   
+    .data:0x000005f2    bcd4    rcall .+2424 ; 0x00000f6c   
+    .data:0x000005f4    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x000005f6    e0937c01    sts 0x017C, r30 
+    .data:0x000005fa    e0937d01    sts 0x017D, r30 
+    .data:0x000005fe    b9d4    rcall .+2418 ; 0x00000f72   
+    .data:0x00000600    bcd4    rcall .+2424 ; 0x00000f7a   
+    .data:0x00000602    bfd4    rcall .+2430 ; 0x00000f82   
+    .data:0x00000604    c9d4    rcall .+2450 ; 0x00000f98   
+    .data:0x00000606    0895    ret 
+    .data:0x00000608    b1d4    rcall .+2402 ; 0x00000f6c   
+    .data:0x0000060a    bbd4    rcall .+2422 ; 0x00000f82   
+    .data:0x0000060c    0895    ret 
+    .data:0x0000060e    e981    ldd r30, Y+1 ; 0x01 
+    .data:0x00000610    c7d4    rcall .+2446 ; 0x00000fa0   
+    .data:0x00000612    c8d4    rcall .+2448 ; 0x00000fa4   
+    .data:0x00000614    39f4    brne .+14 ; 0x00000624  
+    .data:0x00000616    e2e0    ldi r30, 0x4B ; 75  
+    .data:0x00000618    f0e0    ldi r31, 0x00 ; 0   
+    .data:0x0000061a    e0938401    sts 0x0184, r30 
+    .data:0x0000061e    f0938501    sts 0x0185, r31 
+    .data:0x00000622    c3d4    rcall .+2438 ; 0x00000faa   
+    .data:0x00000624    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000626    e0938001    sts 0x0180, r30 
+    .data:0x0000062a    e0938101    sts 0x0181, r30 
+    .data:0x0000062e    68c2    rjmp .+1232 ; 0x00000b00    
+    .data:0x00000630    e881    ld r30, Y   
+    .data:0x00000632    b6d4    rcall .+2412 ; 0x00000fa0   
+    .data:0x00000634    e881    ld r30, Y   
+    .data:0x00000636    e0938301    sts 0x0183, r30 
+    .data:0x0000063a    e2e0    ldi r30, 0x64 ; 100 
+    .data:0x0000063c    f0e0    ldi r31, 0x00 ; 0   
+    .data:0x0000063e    e0938001    sts 0x0180, r30 
+    .data:0x00000642    f0938101    sts 0x0181, r31 
+    .data:0x00000646    b5d4    rcall .+2410 ; 0x00000fb2   
+    .data:0x00000648    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x0000064a    e0938401    sts 0x0184, r30 
+    .data:0x0000064e    e0938501    sts 0x0185, r30 
+    .data:0x00000652    abd4    rcall .+2390 ; 0x00000faa   
+    .data:0x00000654    19c1    rjmp .+562 ; 0x00000888 
+    .data:0x00000656    84d4    rcall .+2312 ; 0x00000f60   
+    .data:0x00000658    e3d0    rcall .+454 ; 0x00000820    
+    .data:0x0000065a    88d4    rcall .+2320 ; 0x00000f6c   
+    .data:0x0000065c    84d4    rcall .+2312 ; 0x00000f66   
+    .data:0x0000065e    0895    ret 
+    .data:0x00000660    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x00000662    e0937f01    sts 0x017F, r30 
+    .data:0x00000666    0895    ret 
+    .data:0x00000668    88d4    rcall .+2320 ; 0x00000f7a   
+    .data:0x0000066a    0895    ret 
+    .data:0x0000066c    2297    sbiw r28, 0x02 ; 2  
+    .data:0x0000066e    a5d4    rcall .+2378 ; 0x00000fba   
+    .data:0x00000670    f070    andi r31, 0x00 ; 0  
+    .data:0x00000672    ee83    std Y+6, r30 ; 0x06 
+    .data:0x00000674    ff83    std Y+7, r31 ; 0x07 
+    .data:0x00000676    00e0    ldi r16, 0x00 ; 0   
+    .data:0x00000678    10e0    ldi r17, 0x00 ; 0   
+    .data:0x0000067a    a2d4    rcall .+2372 ; 0x00000fc0   
+    .data:0x0000067c    28f5    brcc .+74 ; 0x000006c8  
+    .data:0x0000067e    20e0    ldi r18, 0x00 ; 0   
+    .data:0x00000680    30e0    ldi r19, 0x00 ; 0   
+    .data:0x00000682    2032    cpi r18, 0x20 ; 32  
+    .data:0x00000684    eee4    ldi r30, 0x4E ; 78  
+    .data:0x00000686    3e07    cpc r19, r30    
+    .data:0x00000688    20f4    brcc .+8 ; 0x00000692   
+    .data:0x0000068a    9fd4    rcall .+2366 ; 0x00000fca   
+    .data:0x0000068c    2f5f    subi r18, 0xFF ; 255    
+    .data:0x0000068e    3f4f    sbci r19, 0xFF ; 255    
+    .data:0x00000690    f8cf    rjmp .-16 ; 0x00000682  
+    .data:0x00000692    23d4    rcall .+2118 ; 0x00000eda   
+    .data:0x00000694    add0    rcall .+346 ; 0x000007f0    
+    .data:0x00000696    20e0    ldi r18, 0x00 ; 0   
+    .data:0x00000698    30e0    ldi r19, 0x00 ; 0   
+    .data:0x0000069a    2033    cpi r18, 0x30 ; 48  
+    .data:0x0000069c    e5e7    ldi r30, 0x75 ; 117 
+    .data:0x0000069e    3e07    cpc r19, r30    
+    .data:0x000006a0    20f4    brcc .+8 ; 0x000006aa   
+    .data:0x000006a2    93d4    rcall .+2342 ; 0x00000fca   
+    .data:0x000006a4    2f5f    subi r18, 0xFF ; 255    
+    .data:0x000006a6    3f4f    sbci r19, 0xFF ; 255    
+    .data:0x000006a8    f8cf    rjmp .-16 ; 0x0000069a  
+    .data:0x000006aa    17d4    rcall .+2094 ; 0x00000eda   
+    .data:0x000006ac    b9d0    rcall .+370 ; 0x00000820    
+    .data:0x000006ae    20e0    ldi r18, 0x00 ; 0   
+    .data:0x000006b0    30e0    ldi r19, 0x00 ; 0   
+    .data:0x000006b2    2033    cpi r18, 0x30 ; 48  
+    .data:0x000006b4    e5e7    ldi r30, 0x75 ; 117 
+    .data:0x000006b6    3e07    cpc r19, r30    
+    .data:0x000006b8    20f4    brcc .+8 ; 0x000006c2   
+    .data:0x000006ba    87d4    rcall .+2318 ; 0x00000fca   
+    .data:0x000006bc    2f5f    subi r18, 0xFF ; 255    
+    .data:0x000006be    3f4f    sbci r19, 0xFF ; 255    
+    .data:0x000006c0    f8cf    rjmp .-16 ; 0x000006b2  
+    .data:0x000006c2    0f5f    subi r16, 0xFF ; 255    
+    .data:0x000006c4    1f4f    sbci r17, 0xFF ; 255    
+    .data:0x000006c6    d9cf    rjmp .-78 ; 0x0000067a  
+    .data:0x000006c8    e885    ldd r30, Y+8 ; 0x08 
+    .data:0x000006ca    f985    ldd r31, Y+9 ; 0x09 
+    .data:0x000006cc    f070    andi r31, 0x00 ; 0  
+    .data:0x000006ce    ee83    std Y+6, r30 ; 0x06 
+    .data:0x000006d0    ff83    std Y+7, r31 ; 0x07 
+    .data:0x000006d2    00e0    ldi r16, 0x00 ; 0   
+    .data:0x000006d4    10e0    ldi r17, 0x00 ; 0   
+    .data:0x000006d6    74d4    rcall .+2280 ; 0x00000fc0   
+    .data:0x000006d8    28f5    brcc .+74 ; 0x00000724  
+    .data:0x000006da    20e0    ldi r18, 0x00 ; 0   
+    .data:0x000006dc    30e0    ldi r19, 0x00 ; 0   
+    .data:0x000006de    2032    cpi r18, 0x20 ; 32  
+    .data:0x000006e0    eee4    ldi r30, 0x4E ; 78  
+    .data:0x000006e2    3e07    cpc r19, r30    
+    .data:0x000006e4    20f4    brcc .+8 ; 0x000006ee   
+    .data:0x000006e6    71d4    rcall .+2274 ; 0x00000fca   
+    .data:0x000006e8    2f5f    subi r18, 0xFF ; 255    
+    .data:0x000006ea    3f4f    sbci r19, 0xFF ; 255    
+    .data:0x000006ec    f8cf    rjmp .-16 ; 0x000006de  
+    .data:0x000006ee    ffd3    rcall .+2046 ; 0x00000eee   
+    .data:0x000006f0    7fd0    rcall .+254 ; 0x000007f0    
+    .data:0x000006f2    20e0    ldi r18, 0x00 ; 0   
+    .data:0x000006f4    30e0    ldi r19, 0x00 ; 0   
+    .data:0x000006f6    2033    cpi r18, 0x30 ; 48  
+    .data:0x000006f8    e5e7    ldi r30, 0x75 ; 117 
+    .data:0x000006fa    3e07    cpc r19, r30    
+    .data:0x000006fc    20f4    brcc .+8 ; 0x00000706   
+    .data:0x000006fe    65d4    rcall .+2250 ; 0x00000fca   
+    .data:0x00000700    2f5f    subi r18, 0xFF ; 255    
+    .data:0x00000702    3f4f    sbci r19, 0xFF ; 255    
+    .data:0x00000704    f8cf    rjmp .-16 ; 0x000006f6  
+    .data:0x00000706    f3d3    rcall .+2022 ; 0x00000eee   
+    .data:0x00000708    8bd0    rcall .+278 ; 0x00000820    
+    .data:0x0000070a    20e0    ldi r18, 0x00 ; 0   
+    .data:0x0000070c    30e0    ldi r19, 0x00 ; 0   
+    .data:0x0000070e    2033    cpi r18, 0x30 ; 48  
+    .data:0x00000710    e5e7    ldi r30, 0x75 ; 117 
+    .data:0x00000712    3e07    cpc r19, r30    
+    .data:0x00000714    20f4    brcc .+8 ; 0x0000071e   
+    .data:0x00000716    59d4    rcall .+2226 ; 0x00000fca   
+    .data:0x00000718    2f5f    subi r18, 0xFF ; 255    
+    .data:0x0000071a    3f4f    sbci r19, 0xFF ; 255    
+    .data:0x0000071c    f8cf    rjmp .-16 ; 0x0000070e  
+    .data:0x0000071e    0f5f    subi r16, 0xFF ; 255    
+    .data:0x00000720    1f4f    sbci r17, 0xFF ; 255    
+    .data:0x00000722    d9cf    rjmp .-78 ; 0x000006d6  
+    .data:0x00000724    f8c2    rjmp .+1520 ; 0x00000d16    
+    .data:0x00000726    57d4    rcall .+2222 ; 0x00000fd6   
+    .data:0x00000728    d9f0    breq .+54 ; 0x00000760     ; if 0x0180 (red timer) is 0
+    .data:0x0000072a    e0918001    lds r30, 0x0180 
+    .data:0x0000072e    f0918101    lds r31, 0x0181 
+    .data:0x00000732    3197    ;;;; sbiw r30, 0x01 ; 1 ; this decrements the number of red LED flashes. 
+    .data:0x00000734    e0938001    sts 0x0180, r30 
+    .data:0x00000738    f0938101    sts 0x0181, r31 
+    .data:0x0000073c    4cd4    rcall .+2200 ; 0x00000fd6   
+    .data:0x0000073e    69f0    breq .+26 ; 0x0000075a     ; if 0x0180 (red timer) is 0
+    .data:0x00000740    e0918201    lds r30, 0x0182 
+    .data:0x00000744    e150    subi r30, 0x01 ; 1  
+    .data:0x00000746    e0938201    sts 0x0182, r30 
+    .data:0x0000074a    e030    cpi r30, 0x00 ; 0   
+    .data:0x0000074c    29f4    brne .+10 ; 0x00000758  
+    .data:0x0000074e    e0918301    lds r30, 0x0183 
+    .data:0x00000752    ea93    st -Y, r30  
+    .data:0x00000754    7dd0    rcall .+250 ; 0x00000850    
+    .data:0x00000756    2dd4    rcall .+2138 ; 0x00000fb2   
+    .data:0x00000758    02c0    rjmp .+4 ; 0x0000075e   
+    .data:0x0000075a    08d4    rcall .+2064 ; 0x00000f6c   
+    .data:0x0000075c    1dd4    rcall .+2106 ; 0x00000f98   
+    .data:0x0000075e    0fc0    rjmp .+30 ; 0x0000077e  
+    .data:0x00000760    40d4    rcall .+2176 ; 0x00000fe2   
+    .data:0x00000762    69f0    breq .+26 ; 0x0000077e     ; if 0x0184 (green timer) is 0
+    .data:0x00000764    e0918401    lds r30, 0x0184 
+    .data:0x00000768    f0918501    lds r31, 0x0185 
+    .data:0x0000076c    3197    ;;;; last decr.(set back to 75) ;;; sbiw r30, 0x01 ; 1  
+    .data:0x0000076e    e0938401    sts 0x0184, r30 
+    .data:0x00000772    f0938501    sts 0x0185, r31 
+    .data:0x00000776    35d4    rcall .+2154 ; 0x00000fe2   
+    .data:0x00000778    11f4    brne .+4 ; 0x0000077e      ; if 0x0184 (green timer) is 0
+    .data:0x0000077a    f8d3    rcall .+2032 ; 0x00000f6c   
+    .data:0x0000077c    0dd4    rcall .+2074 ; 0x00000f98   
+    .data:0x0000077e    e0917f01    lds r30, 0x017F 
+    .data:0x00000782    e030    cpi r30, 0x00 ; 0   
+    .data:0x00000784    19f0    breq .+6 ; 0x0000078c   
+    .data:0x00000786    ecd3    rcall .+2008 ; 0x00000f60   
+    .data:0x00000788    33d0    rcall .+102 ; 0x000007f0    
+    .data:0x0000078a    0ac0    rjmp .+20 ; 0x000007a0  
+    .data:0x0000078c    e0917e01    lds r30, 0x017E 
+    .data:0x00000790    e150    subi r30, 0x01 ; 1  
+    .data:0x00000792    e0937e01    sts 0x017E, r30 
+    .data:0x00000796    e030    cpi r30, 0x00 ; 0   
+    .data:0x00000798    19f4    brne .+6 ; 0x000007a0   
+    .data:0x0000079a    e2d3    rcall .+1988 ; 0x00000f60   
+    .data:0x0000079c    59d0    rcall .+178 ; 0x00000850    
+    .data:0x0000079e    e9d3    rcall .+2002 ; 0x00000f72   
+    .data:0x000007a0    abde    rcall .-682 ; 0x000004f8    ; Check if r31:30 > r26:r26          ;... this looks like a timer circuit
+    .data:0x000007a2    e030    cpi r30, 0x00 ; 0           ; Jump to 0x7ec if not
+    .data:0x000007a4    19f1    breq .+70 ; 0x000007ec  
+    .data:0x000007a6    e0917c01    lds r30, 0x017C         ; Increment 0x017D:0x017C by 1
+    .data:0x000007aa    f0917d01    lds r31, 0x017D 
+    .data:0x000007ae    3196    adiw r30, 0x01 ; 1  
+    .data:0x000007b0    e0937c01    sts 0x017C, r30 
+    .data:0x000007b4    f0937d01    sts 0x017D, r31 
+    .data:0x000007b8    a0917c01    lds r26, 0x017C 
+    .data:0x000007bc    b0917d01    lds r27, 0x017D 
+    .data:0x000007c0    a83e    cpi r26, 0xE8 ; 232         ; Compare r27:r26 with 3:232
+    .data:0x000007c2    e3e0    ldi r30, 0x03 ; 3   
+    .data:0x000007c4    be07    cpc r27, r30    
+    .data:0x000007c6    28f0    brcs .+10 ; 0x000007d2      ; if r27:r26 < 3:232, branch to 0x7d2
+    .data:0x000007c8    e0e0    ldi r30, 0x00 ; 0           ; otherwise, write them to 0
+    .data:0x000007ca    e0937c01    sts 0x017C, r30 
+    .data:0x000007ce    e0937d01    sts 0x017D, r30 
+    .data:0x000007d2    a0917c01    lds r26, 0x017C 
+    .data:0x000007d6    b0917d01    lds r27, 0x017D 
+    .data:0x000007da    aa30    cpi r26, 0x0A ; 10  
+    .data:0x000007dc    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x000007de    be07    cpc r27, r30    
+    .data:0x000007e0    18f4    brcc .+6 ; 0x000007e8   
+    .data:0x000007e2    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x000007e4    ddd3    rcall .+1978 ; 0x00000fa0   ; push 0 onto -Y and jump to 0x7f0
+    .data:0x000007e6    01c0    rjmp .+2 ; 0x000007ea   
+    .data:0x000007e8    bed3    rcall .+1916 ; 0x00000f66   
+    .data:0x000007ea    01c0    rjmp .+2 ; 0x000007ee   
+    .data:0x000007ec    bcd3    rcall .+1912 ; 0x00000f66   
+    .data:0x000007ee    0895    ret 
+    .data:0x000007f0    fed3    rcall .+2044 ; 0x00000fee   
+    .data:0x000007f2    11f4    brne .+4 ; 0x000007f8   
+    .data:0x000007f4    9798    cbi 0x12, 7 ; 18    
+    .data:0x000007f6    13c0    rjmp .+38 ; 0x0000081e  
+    .data:0x000007f8    fdd3    rcall .+2042 ; 0x00000ff4   
+    .data:0x000007fa    11f4    brne .+4 ; 0x00000800   
+    .data:0x000007fc    9698    cbi 0x12, 6 ; 18    
+    .data:0x000007fe    0fc0    rjmp .+30 ; 0x0000081e  
+    .data:0x00000800    fcd3    rcall .+2040 ; 0x00000ffa   
+    .data:0x00000802    11f4    brne .+4 ; 0x00000808   
+    .data:0x00000804    9598    cbi 0x12, 5 ; 18    
+    .data:0x00000806    0bc0    rjmp .+22 ; 0x0000081e  
+    .data:0x00000808    fbd3    rcall .+2038 ; 0x00001000   
+    .data:0x0000080a    11f4    brne .+4 ; 0x00000810   
+    .data:0x0000080c    9498    cbi 0x12, 4 ; 18    
+    .data:0x0000080e    07c0    rjmp .+14 ; 0x0000081e  
+    .data:0x00000810    fad3    rcall .+2036 ; 0x00001006   
+    .data:0x00000812    11f0    breq .+4 ; 0x00000818   
+    .data:0x00000814    c7d3    rcall .+1934 ; 0x00000fa4   
+    .data:0x00000816    19f4    brne .+6 ; 0x0000081e   
+    .data:0x00000818    e2b3    in r30, 0x12 ; 18   
+    .data:0x0000081a    ef79    andi r30, 0x9F ; 159    
+    .data:0x0000081c    e2bb    out 0x12, r30 ; 18  
+    .data:0x0000081e    34c0    rjmp .+104 ; 0x00000888 
+    .data:0x00000820    e6d3    rcall .+1996 ; 0x00000fee   
+    .data:0x00000822    11f4    brne .+4 ; 0x00000828   
+    .data:0x00000824    979a    sbi 0x12, 7 ; 18    
+    .data:0x00000826    13c0    rjmp .+38 ; 0x0000084e  
+    .data:0x00000828    e5d3    rcall .+1994 ; 0x00000ff4   
+    .data:0x0000082a    11f4    brne .+4 ; 0x00000830   
+    .data:0x0000082c    969a    sbi 0x12, 6 ; 18    
+    .data:0x0000082e    0fc0    rjmp .+30 ; 0x0000084e  
+    .data:0x00000830    e4d3    rcall .+1992 ; 0x00000ffa   
+    .data:0x00000832    11f4    brne .+4 ; 0x00000838   
+    .data:0x00000834    959a    sbi 0x12, 5 ; 18    
+    .data:0x00000836    0bc0    rjmp .+22 ; 0x0000084e  
+    .data:0x00000838    e3d3    rcall .+1990 ; 0x00001000   
+    .data:0x0000083a    11f4    brne .+4 ; 0x00000840   
+    .data:0x0000083c    949a    sbi 0x12, 4 ; 18    
+    .data:0x0000083e    07c0    rjmp .+14 ; 0x0000084e  
+    .data:0x00000840    e2d3    rcall .+1988 ; 0x00001006   
+    .data:0x00000842    11f0    breq .+4 ; 0x00000848   
+    .data:0x00000844    afd3    rcall .+1886 ; 0x00000fa4   
+    .data:0x00000846    19f4    brne .+6 ; 0x0000084e   
+    .data:0x00000848    e2b3    in r30, 0x12 ; 18   
+    .data:0x0000084a    e066    ori r30, 0x60 ; 96  
+    .data:0x0000084c    e2bb    out 0x12, r30 ; 18  
+    .data:0x0000084e    1cc0    rjmp .+56 ; 0x00000888  
+    .data:0x00000850    ced3    rcall .+1948 ; 0x00000fee   
+    .data:0x00000852    19f4    brne .+6 ; 0x0000085a   
+    .data:0x00000854    e2b3    in r30, 0x12 ; 18   
+    .data:0x00000856    a0e8    ldi r26, 0x80 ; 128 
+    .data:0x00000858    15c0    rjmp .+42 ; 0x00000884  
+    .data:0x0000085a    ccd3    rcall .+1944 ; 0x00000ff4   
+    .data:0x0000085c    19f4    brne .+6 ; 0x00000864   
+    .data:0x0000085e    e2b3    in r30, 0x12 ; 18   
+    .data:0x00000860    a0e4    ldi r26, 0x40 ; 64  
+    .data:0x00000862    10c0    rjmp .+32 ; 0x00000884  
+    .data:0x00000864    cad3    rcall .+1940 ; 0x00000ffa   
+    .data:0x00000866    19f4    brne .+6 ; 0x0000086e   
+    .data:0x00000868    e2b3    in r30, 0x12 ; 18   
+    .data:0x0000086a    a0e2    ldi r26, 0x20 ; 32  
+    .data:0x0000086c    0bc0    rjmp .+22 ; 0x00000884  
+    .data:0x0000086e    c8d3    rcall .+1936 ; 0x00001000   
+    .data:0x00000870    19f4    brne .+6 ; 0x00000878   
+    .data:0x00000872    e2b3    in r30, 0x12 ; 18   
+    .data:0x00000874    a0e1    ldi r26, 0x10 ; 16  
+    .data:0x00000876    06c0    rjmp .+12 ; 0x00000884  
+    .data:0x00000878    c6d3    rcall .+1932 ; 0x00001006   
+    .data:0x0000087a    11f0    breq .+4 ; 0x00000880   
+    .data:0x0000087c    93d3    rcall .+1830 ; 0x00000fa4   
+    .data:0x0000087e    21f4    brne .+8 ; 0x00000888   
+    .data:0x00000880    e2b3    in r30, 0x12 ; 18   
+    .data:0x00000882    a0e6    ldi r26, 0x60 ; 96  
+    .data:0x00000884    ea27    eor r30, r26    
+    .data:0x00000886    e2bb    out 0x12, r30 ; 18  
+    .data:0x00000888    2196    adiw r28, 0x01 ; 1  
+    .data:0x0000088a    0895    ret 
+    .data:0x0000088c    e5e5    ldi r30, 0x55 ; 85  
+    .data:0x0000088e    e0938901    sts 0x0189, r30 
+    .data:0x00000892    e0938a01    sts 0x018A, r30 
+    .data:0x00000896    e0938b01    sts 0x018B, r30 
+    .data:0x0000089a    e5e8    ldi r30, 0x85 ; 133 
+    .data:0x0000089c    e0938c01    sts 0x018C, r30 
+    .data:0x000008a0    e0938d01    sts 0x018D, r30 
+    .data:0x000008a4    e0938e01    sts 0x018E, r30 
+    .data:0x000008a8    e5e8    ldi r30, 0x85 ; 133 
+    .data:0x000008aa    f1e8    ldi r31, 0x81 ; 129 
+    .data:0x000008ac    dfd2    rcall .+1470 ; 0x00000e6c   
+    .data:0x000008ae    efe1    ldi r30, 0x1F ; 31  
+    .data:0x000008b0    f2e8    ldi r31, 0x82 ; 130 
+    .data:0x000008b2    dcd2    rcall .+1464 ; 0x00000e6c   
+    .data:0x000008b4    e0ef    ldi r30, 0xF0 ; 240 
+    .data:0x000008b6    f3e8    ldi r31, 0x83 ; 131 
+    .data:0x000008b8    d9d2    rcall .+1458 ; 0x00000e6c   
+    .data:0x000008ba    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x000008bc    f4e8    ldi r31, 0x84 ; 132 
+    .data:0x000008be    d6d2    rcall .+1452 ; 0x00000e6c   
+    .data:0x000008c0    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x000008c2    f5e8    ldi r31, 0x85 ; 133 
+    .data:0x000008c4    d3d2    rcall .+1446 ; 0x00000e6c   
+    .data:0x000008c6    e1ec    ldi r30, 0xC1 ; 193 
+    .data:0x000008c8    fee8    ldi r31, 0x8E ; 142 
+    .data:0x000008ca    d0d2    rcall .+1440 ; 0x00000e6c   
+    .data:0x000008cc    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x000008ce    ffe8    ldi r31, 0x8F ; 143 
+    .data:0x000008d0    cdd2    rcall .+1434 ; 0x00000e6c   
+    .data:0x000008d2    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x000008d4    f0e9    ldi r31, 0x90 ; 144 
+    .data:0x000008d6    cad2    rcall .+1428 ; 0x00000e6c   
+    .data:0x000008d8    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x000008da    f1e9    ldi r31, 0x91 ; 145 
+    .data:0x000008dc    c7d2    rcall .+1422 ; 0x00000e6c   
+    .data:0x000008de    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x000008e0    f2e9    ldi r31, 0x92 ; 146 
+    .data:0x000008e2    c4d2    rcall .+1416 ; 0x00000e6c   
+    .data:0x000008e4    e8e8    ldi r30, 0x88 ; 136 
+    .data:0x000008e6    f9e8    ldi r31, 0x89 ; 137 
+    .data:0x000008e8    c1d2    rcall .+1410 ; 0x00000e6c   
+    .data:0x000008ea    14d1    rcall .+552 ; 0x00000b14    
+    .data:0x000008ec    0895    ret 
+    .data:0x000008ee    e881    ld r30, Y   
+    .data:0x000008f0    f981    ldd r31, Y+1 ; 0x01 
+    .data:0x000008f2    e0938701    sts 0x0187, r30 
+    .data:0x000008f6    f0938801    sts 0x0188, r31 
+    .data:0x000008fa    e134    cpi r30, 0x41 ; 65  
+    .data:0x000008fc    a1e2    ldi r26, 0x21 ; 33  
+    .data:0x000008fe    fa07    cpc r31, r26    
+    .data:0x00000900    69f4    brne .+26 ; 0x0000091c  
+    .data:0x00000902    efe0    ldi r30, 0x0F ; 15  
+    .data:0x00000904    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000906    b2d2    rcall .+1380 ; 0x00000e6c   
+    .data:0x00000908    e0ea    ldi r30, 0xA0 ; 160 
+    .data:0x0000090a    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x0000090c    afd2    rcall .+1374 ; 0x00000e6c   
+    .data:0x0000090e    e6ea    ldi r30, 0xA6 ; 166 
+    .data:0x00000910    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000912    acd2    rcall .+1368 ; 0x00000e6c   
+    .data:0x00000914    e8e2    ldi r30, 0x28 ; 40  
+    .data:0x00000916    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x00000918    a9d2    rcall .+1362 ; 0x00000e6c   
+    .data:0x0000091a    f2c0    rjmp .+484 ; 0x00000b00 
+    .data:0x0000091c    e234    cpi r30, 0x42 ; 66  
+    .data:0x0000091e    a1e2    ldi r26, 0x21 ; 33  
+    .data:0x00000920    fa07    cpc r31, r26    
+    .data:0x00000922    59f4    brne .+22 ; 0x0000093a  
+    .data:0x00000924    e0ef    ldi r30, 0xF0 ; 240 
+    .data:0x00000926    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000928    a1d2    rcall .+1346 ; 0x00000e6c   
+    .data:0x0000092a    e0e6    ldi r30, 0x60 ; 96  
+    .data:0x0000092c    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x0000092e    9ed2    rcall .+1340 ; 0x00000e6c   
+    .data:0x00000930    edea    ldi r30, 0xAD ; 173 
+    .data:0x00000932    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000934    9bd2    rcall .+1334 ; 0x00000e6c   
+    .data:0x00000936    6ad3    rcall .+1748 ; 0x0000100c   
+    .data:0x00000938    e3c0    rjmp .+454 ; 0x00000b00 
+    .data:0x0000093a    e334    cpi r30, 0x43 ; 67  
+    .data:0x0000093c    a1e2    ldi r26, 0x21 ; 33  
+    .data:0x0000093e    fa07    cpc r31, r26    
+    .data:0x00000940    59f4    brne .+22 ; 0x00000958  
+    .data:0x00000942    e8ef    ldi r30, 0xF8 ; 248 
+    .data:0x00000944    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000946    92d2    rcall .+1316 ; 0x00000e6c   
+    .data:0x00000948    e0e3    ldi r30, 0x30 ; 48  
+    .data:0x0000094a    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x0000094c    8fd2    rcall .+1310 ; 0x00000e6c   
+    .data:0x0000094e    e9eb    ldi r30, 0xB9 ; 185 
+    .data:0x00000950    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000952    8cd2    rcall .+1304 ; 0x00000e6c   
+    .data:0x00000954    5ed3    rcall .+1724 ; 0x00001012   
+    .data:0x00000956    d4c0    rjmp .+424 ; 0x00000b00 
+    .data:0x00000958    e434    cpi r30, 0x44 ; 68  
+    .data:0x0000095a    a1e2    ldi r26, 0x21 ; 33  
+    .data:0x0000095c    fa07    cpc r31, r26    
+    .data:0x0000095e    69f4    brne .+26 ; 0x0000097a  
+    .data:0x00000960    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000962    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000964    83d2    rcall .+1286 ; 0x00000e6c   
+    .data:0x00000966    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000968    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x0000096a    80d2    rcall .+1280 ; 0x00000e6c   
+    .data:0x0000096c    e5ec    ldi r30, 0xC5 ; 197 
+    .data:0x0000096e    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000970    7dd2    rcall .+1274 ; 0x00000e6c   
+    .data:0x00000972    e8e6    ldi r30, 0x68 ; 104 
+    .data:0x00000974    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x00000976    7ad2    rcall .+1268 ; 0x00000e6c   
+    .data:0x00000978    c3c0    rjmp .+390 ; 0x00000b00 
+    .data:0x0000097a    e134    cpi r30, 0x41 ; 65  
+    .data:0x0000097c    a2e2    ldi r26, 0x22 ; 34  
+    .data:0x0000097e    fa07    cpc r31, r26    
+    .data:0x00000980    69f4    brne .+26 ; 0x0000099c  
+    .data:0x00000982    e7e0    ldi r30, 0x07 ; 7   
+    .data:0x00000984    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000986    72d2    rcall .+1252 ; 0x00000e6c   
+    .data:0x00000988    e0ed    ldi r30, 0xD0 ; 208 
+    .data:0x0000098a    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x0000098c    6fd2    rcall .+1246 ; 0x00000e6c   
+    .data:0x0000098e    edec    ldi r30, 0xCD ; 205 
+    .data:0x00000990    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000992    6cd2    rcall .+1240 ; 0x00000e6c   
+    .data:0x00000994    e8e3    ldi r30, 0x38 ; 56  
+    .data:0x00000996    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x00000998    69d2    rcall .+1234 ; 0x00000e6c   
+    .data:0x0000099a    b2c0    rjmp .+356 ; 0x00000b00 
+    .data:0x0000099c    e234    cpi r30, 0x42 ; 66  
+    .data:0x0000099e    a2e2    ldi r26, 0x22 ; 34  
+    .data:0x000009a0    fa07    cpc r31, r26    
+    .data:0x000009a2    69f4    brne .+26 ; 0x000009be  
+    .data:0x000009a4    efe1    ldi r30, 0x1F ; 31  
+    .data:0x000009a6    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x000009a8    61d2    rcall .+1218 ; 0x00000e6c   
+    .data:0x000009aa    e0e4    ldi r30, 0x40 ; 64  
+    .data:0x000009ac    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x000009ae    5ed2    rcall .+1212 ; 0x00000e6c   
+    .data:0x000009b0    e8ed    ldi r30, 0xD8 ; 216 
+    .data:0x000009b2    fae8    ldi r31, 0x8A ; 138 
+    .data:0x000009b4    5bd2    rcall .+1206 ; 0x00000e6c   
+    .data:0x000009b6    e0ef    ldi r30, 0xF0 ; 240 
+    .data:0x000009b8    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x000009ba    58d2    rcall .+1200 ; 0x00000e6c   
+    .data:0x000009bc    a1c0    rjmp .+322 ; 0x00000b00 
+    .data:0x000009be    e334    cpi r30, 0x43 ; 67  
+    .data:0x000009c0    a2e2    ldi r26, 0x22 ; 34  
+    .data:0x000009c2    fa07    cpc r31, r26    
+    .data:0x000009c4    69f4    brne .+26 ; 0x000009e0  
+    .data:0x000009c6    e7e2    ldi r30, 0x27 ; 39  
+    .data:0x000009c8    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x000009ca    50d2    rcall .+1184 ; 0x00000e6c   
+    .data:0x000009cc    e0e1    ldi r30, 0x10 ; 16  
+    .data:0x000009ce    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x000009d0    4dd2    rcall .+1178 ; 0x00000e6c   
+    .data:0x000009d2    e4ee    ldi r30, 0xE4 ; 228 
+    .data:0x000009d4    fae8    ldi r31, 0x8A ; 138 
+    .data:0x000009d6    4ad2    rcall .+1172 ; 0x00000e6c   
+    .data:0x000009d8    e8ea    ldi r30, 0xA8 ; 168 
+    .data:0x000009da    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x000009dc    47d2    rcall .+1166 ; 0x00000e6c   
+    .data:0x000009de    90c0    rjmp .+288 ; 0x00000b00 
+    .data:0x000009e0    e434    cpi r30, 0x44 ; 68  
+    .data:0x000009e2    a2e2    ldi r26, 0x22 ; 34  
+    .data:0x000009e4    fa07    cpc r31, r26    
+    .data:0x000009e6    69f4    brne .+26 ; 0x00000a02  
+    .data:0x000009e8    eee2    ldi r30, 0x2E ; 46  
+    .data:0x000009ea    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x000009ec    3fd2    rcall .+1150 ; 0x00000e6c   
+    .data:0x000009ee    e0ee    ldi r30, 0xE0 ; 224 
+    .data:0x000009f0    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x000009f2    3cd2    rcall .+1144 ; 0x00000e6c   
+    .data:0x000009f4    ecee    ldi r30, 0xEC ; 236 
+    .data:0x000009f6    fae8    ldi r31, 0x8A ; 138 
+    .data:0x000009f8    39d2    rcall .+1138 ; 0x00000e6c   
+    .data:0x000009fa    e8e7    ldi r30, 0x78 ; 120 
+    .data:0x000009fc    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x000009fe    36d2    rcall .+1132 ; 0x00000e6c   
+    .data:0x00000a00    7fc0    rjmp .+254 ; 0x00000b00 
+    .data:0x00000a02    e134    cpi r30, 0x41 ; 65  
+    .data:0x00000a04    a3e2    ldi r26, 0x23 ; 35  
+    .data:0x00000a06    fa07    cpc r31, r26    
+    .data:0x00000a08    69f4    brne .+26 ; 0x00000a24  
+    .data:0x00000a0a    e6e3    ldi r30, 0x36 ; 54  
+    .data:0x00000a0c    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000a0e    2ed2    rcall .+1116 ; 0x00000e6c   
+    .data:0x00000a10    e0eb    ldi r30, 0xB0 ; 176 
+    .data:0x00000a12    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x00000a14    2bd2    rcall .+1110 ; 0x00000e6c   
+    .data:0x00000a16    e8ef    ldi r30, 0xF8 ; 248 
+    .data:0x00000a18    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000a1a    28d2    rcall .+1104 ; 0x00000e6c   
+    .data:0x00000a1c    e0e3    ldi r30, 0x30 ; 48  
+    .data:0x00000a1e    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x00000a20    25d2    rcall .+1098 ; 0x00000e6c   
+    .data:0x00000a22    6ec0    rjmp .+220 ; 0x00000b00 
+    .data:0x00000a24    e234    cpi r30, 0x42 ; 66  
+    .data:0x00000a26    a3e2    ldi r26, 0x23 ; 35  
+    .data:0x00000a28    fa07    cpc r31, r26    
+    .data:0x00000a2a    59f4    brne .+22 ; 0x00000a42  
+    .data:0x00000a2c    eee3    ldi r30, 0x3E ; 62  
+    .data:0x00000a2e    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000a30    1dd2    rcall .+1082 ; 0x00000e6c   
+    .data:0x00000a32    f2d2    rcall .+1508 ; 0x00001018   
+    .data:0x00000a34    e3e0    ldi r30, 0x03 ; 3   
+    .data:0x00000a36    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000a38    19d2    rcall .+1074 ; 0x00000e6c   
+    .data:0x00000a3a    e8ee    ldi r30, 0xE8 ; 232 
+    .data:0x00000a3c    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x00000a3e    16d2    rcall .+1068 ; 0x00000e6c   
+    .data:0x00000a40    5fc0    rjmp .+190 ; 0x00000b00 
+    .data:0x00000a42    e334    cpi r30, 0x43 ; 67  
+    .data:0x00000a44    a3e2    ldi r26, 0x23 ; 35  
+    .data:0x00000a46    fa07    cpc r31, r26    
+    .data:0x00000a48    59f4    brne .+22 ; 0x00000a60  
+    .data:0x00000a4a    e1ec    ldi r30, 0xC1 ; 193 
+    .data:0x00000a4c    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000a4e    0ed2    rcall .+1052 ; 0x00000e6c   
+    .data:0x00000a50    e3d2    rcall .+1478 ; 0x00001018   
+    .data:0x00000a52    ebe0    ldi r30, 0x0B ; 11  
+    .data:0x00000a54    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000a56    0ad2    rcall .+1044 ; 0x00000e6c   
+    .data:0x00000a58    e8eb    ldi r30, 0xB8 ; 184 
+    .data:0x00000a5a    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x00000a5c    07d2    rcall .+1038 ; 0x00000e6c   
+    .data:0x00000a5e    50c0    rjmp .+160 ; 0x00000b00 
+    .data:0x00000a60    e434    cpi r30, 0x44 ; 68  
+    .data:0x00000a62    a3e2    ldi r26, 0x23 ; 35  
+    .data:0x00000a64    fa07    cpc r31, r26    
+    .data:0x00000a66    69f4    brne .+26 ; 0x00000a82  
+    .data:0x00000a68    e9ec    ldi r30, 0xC9 ; 201 
+    .data:0x00000a6a    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000a6c    ffd1    rcall .+1022 ; 0x00000e6c   
+    .data:0x00000a6e    e0e5    ldi r30, 0x50 ; 80  
+    .data:0x00000a70    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x00000a72    fcd1    rcall .+1016 ; 0x00000e6c   
+    .data:0x00000a74    e7e1    ldi r30, 0x17 ; 23  
+    .data:0x00000a76    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000a78    f9d1    rcall .+1010 ; 0x00000e6c   
+    .data:0x00000a7a    e0e7    ldi r30, 0x70 ; 112 
+    .data:0x00000a7c    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x00000a7e    f6d1    rcall .+1004 ; 0x00000e6c   
+    .data:0x00000a80    3fc0    rjmp .+126 ; 0x00000b00 
+    .data:0x00000a82    e134    cpi r30, 0x41 ; 65  
+    .data:0x00000a84    a4e2    ldi r26, 0x24 ; 36  
+    .data:0x00000a86    fa07    cpc r31, r26    
+    .data:0x00000a88    69f4    brne .+26 ; 0x00000aa4  
+    .data:0x00000a8a    e5eb    ldi r30, 0xB5 ; 181 
+    .data:0x00000a8c    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000a8e    eed1    rcall .+988 ; 0x00000e6c    
+    .data:0x00000a90    e8ec    ldi r30, 0xC8 ; 200 
+    .data:0x00000a92    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x00000a94    ebd1    rcall .+982 ; 0x00000e6c    
+    .data:0x00000a96    efe1    ldi r30, 0x1F ; 31  
+    .data:0x00000a98    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000a9a    e8d1    rcall .+976 ; 0x00000e6c    
+    .data:0x00000a9c    e0e4    ldi r30, 0x40 ; 64  
+    .data:0x00000a9e    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x00000aa0    e5d1    rcall .+970 ; 0x00000e6c    
+    .data:0x00000aa2    2ec0    rjmp .+92 ; 0x00000b00  
+    .data:0x00000aa4    e234    cpi r30, 0x42 ; 66  
+    .data:0x00000aa6    a4e2    ldi r26, 0x24 ; 36  
+    .data:0x00000aa8    fa07    cpc r31, r26    
+    .data:0x00000aaa    59f4    brne .+22 ; 0x00000ac2  
+    .data:0x00000aac    e1ed    ldi r30, 0xD1 ; 209 
+    .data:0x00000aae    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000ab0    ddd1    rcall .+954 ; 0x00000e6c    
+    .data:0x00000ab2    e0e2    ldi r30, 0x20 ; 32  
+    .data:0x00000ab4    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x00000ab6    dad1    rcall .+948 ; 0x00000e6c    
+    .data:0x00000ab8    eae2    ldi r30, 0x2A ; 42  
+    .data:0x00000aba    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000abc    d7d1    rcall .+942 ; 0x00000e6c    
+    .data:0x00000abe    a6d2    rcall .+1356 ; 0x0000100c   
+    .data:0x00000ac0    1fc0    rjmp .+62 ; 0x00000b00  
+    .data:0x00000ac2    e334    cpi r30, 0x43 ; 67  
+    .data:0x00000ac4    a4e2    ldi r26, 0x24 ; 36  
+    .data:0x00000ac6    fa07    cpc r31, r26    
+    .data:0x00000ac8    59f4    brne .+22 ; 0x00000ae0  
+    .data:0x00000aca    e0ee    ldi r30, 0xE0 ; 224 
+    .data:0x00000acc    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000ace    ced1    rcall .+924 ; 0x00000e6c    
+    .data:0x00000ad0    e0ec    ldi r30, 0xC0 ; 192 
+    .data:0x00000ad2    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x00000ad4    cbd1    rcall .+918 ; 0x00000e6c    
+    .data:0x00000ad6    e6e3    ldi r30, 0x36 ; 54  
+    .data:0x00000ad8    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000ada    c8d1    rcall .+912 ; 0x00000e6c    
+    .data:0x00000adc    9ad2    rcall .+1332 ; 0x00001012   
+    .data:0x00000ade    10c0    rjmp .+32 ; 0x00000b00  
+    .data:0x00000ae0    e434    cpi r30, 0x44 ; 68  
+    .data:0x00000ae2    a4e2    ldi r26, 0x24 ; 36  
+    .data:0x00000ae4    fa07    cpc r31, r26    
+    .data:0x00000ae6    61f4    brne .+24 ; 0x00000b00  
+    .data:0x00000ae8    e8ed    ldi r30, 0xD8 ; 216 
+    .data:0x00000aea    f7e8    ldi r31, 0x87 ; 135 
+    .data:0x00000aec    bfd1    rcall .+894 ; 0x00000e6c    
+    .data:0x00000aee    e0ef    ldi r30, 0xF0 ; 240 
+    .data:0x00000af0    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x00000af2    bcd1    rcall .+888 ; 0x00000e6c    
+    .data:0x00000af4    eee3    ldi r30, 0x3E ; 62  
+    .data:0x00000af6    fae8    ldi r31, 0x8A ; 138 
+    .data:0x00000af8    b9d1    rcall .+882 ; 0x00000e6c    
+    .data:0x00000afa    e0e8    ldi r30, 0x80 ; 128 
+    .data:0x00000afc    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x00000afe    b6d1    rcall .+876 ; 0x00000e6c    
+    .data:0x00000b00    2296    adiw r28, 0x02 ; 2  
+    .data:0x00000b02    0895    ret 
+    .data:0x00000b04    939a    sbi 0x12, 3 ; 18    
+    .data:0x00000b06    e0ef    ldi r30, 0xF0 ; 240 
+    .data:0x00000b08    f6e8    ldi r31, 0x86 ; 134 
+    .data:0x00000b0a    b0d1    rcall .+864 ; 0x00000e6c    
+    .data:0x00000b0c    9398    cbi 0x12, 3 ; 18    
+    .data:0x00000b0e    0895    ret 
+    .data:0x00000b10    939a    sbi 0x12, 3 ; 18    
+    .data:0x00000b12    0895    ret 
+    .data:0x00000b14    939a    sbi 0x12, 3 ; 18    
+    .data:0x00000b16    e0e3    ldi r30, 0x30 ; 48  
+    .data:0x00000b18    f6e8    ldi r31, 0x86 ; 134 
+    .data:0x00000b1a    a8d1    rcall .+848 ; 0x00000e6c    
+    .data:0x00000b1c    9398    cbi 0x12, 3 ; 18    
+    .data:0x00000b1e    0895    ret 
+    .data:0x00000b20    0a93    st -Y, r16  
+    .data:0x00000b22    e981    ldd r30, Y+1 ; 0x01 
+    .data:0x00000b24    fa81    ldd r31, Y+2 ; 0x02 
+    .data:0x00000b26    e070    andi r30, 0x00 ; 0  
+    .data:0x00000b28    ef2f    mov r30, r31    
+    .data:0x00000b2a    f0e0    ldi r31, 0x00 ; 0   
+    .data:0x00000b2c    0e2f    mov r16, r30    
+    .data:0x00000b2e    c298    cbi 0x18, 2 ; 24    
+    .data:0x00000b30    76d2    rcall .+1260 ; 0x0000101e   
+    .data:0x00000b32    0981    ldd r16, Y+1 ; 0x01 
+    .data:0x00000b34    74d2    rcall .+1256 ; 0x0000101e   
+    .data:0x00000b36    efef    ldi r30, 0xFF ; 255 
+    .data:0x00000b38    ea93    st -Y, r30  
+    .data:0x00000b3a    85dc    rcall .-1782 ; 0x00000446   
+    .data:0x00000b3c    c29a    sbi 0x18, 2 ; 24    
+    .data:0x00000b3e    0881    ld r16, Y   
+    .data:0x00000b40    2396    adiw r28, 0x03 ; 3  
+    .data:0x00000b42    0895    ret 
+    .data:0x00000b44    2397    sbiw r28, 0x03 ; 3  
+    .data:0x00000b46    39d2    rcall .+1138 ; 0x00000fba   
+    .data:0x00000b48    6cd2    rcall .+1240 ; 0x00001022   
+    .data:0x00000b4a    efe8    ldi r30, 0x8F ; 143 
+    .data:0x00000b4c    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000b4e    77d2    rcall .+1262 ; 0x0000103e   
+    .data:0x00000b50    efe8    ldi r30, 0x8F ; 143 
+    .data:0x00000b52    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000b54    ff93    push r31    
+    .data:0x00000b56    ef93    push r30    
+    .data:0x00000b58    77d2    rcall .+1262 ; 0x00001048   
+    .data:0x00000b5a    af91    pop r26 
+    .data:0x00000b5c    bf91    pop r27 
+    .data:0x00000b5e    ec93    st X, r30   
+    .data:0x00000b60    e0e9    ldi r30, 0x90 ; 144 
+    .data:0x00000b62    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000b64    6cd2    rcall .+1240 ; 0x0000103e   
+    .data:0x00000b66    e0e9    ldi r30, 0x90 ; 144 
+    .data:0x00000b68    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000b6a    ff93    push r31    
+    .data:0x00000b6c    ef93    push r30    
+    .data:0x00000b6e    70d2    rcall .+1248 ; 0x00001050   
+    .data:0x00000b70    af91    pop r26 
+    .data:0x00000b72    bf91    pop r27 
+    .data:0x00000b74    ec93    st X, r30   
+    .data:0x00000b76    e1e9    ldi r30, 0x91 ; 145 
+    .data:0x00000b78    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000b7a    61d2    rcall .+1218 ; 0x0000103e   
+    .data:0x00000b7c    e1e9    ldi r30, 0x91 ; 145 
+    .data:0x00000b7e    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000b80    ff93    push r31    
+    .data:0x00000b82    ef93    push r30    
+    .data:0x00000b84    69d2    rcall .+1234 ; 0x00001058   
+    .data:0x00000b86    af91    pop r26 
+    .data:0x00000b88    bf91    pop r27 
+    .data:0x00000b8a    ec93    st X, r30   
+    .data:0x00000b8c    e2e9    ldi r30, 0x92 ; 146 
+    .data:0x00000b8e    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000b90    67d2    rcall .+1230 ; 0x00001060   
+    .data:0x00000b92    e2e9    ldi r30, 0x92 ; 146 
+    .data:0x00000b94    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000b96    ff93    push r31    
+    .data:0x00000b98    ef93    push r30    
+    .data:0x00000b9a    67d2    rcall .+1230 ; 0x0000106a   
+    .data:0x00000b9c    af91    pop r26 
+    .data:0x00000b9e    bf91    pop r27 
+    .data:0x00000ba0    ec93    st X, r30   
+    .data:0x00000ba2    efe8    ldi r30, 0x8F ; 143 
+    .data:0x00000ba4    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000ba6    3081    ld r19, Z   
+    .data:0x00000ba8    27e0    ldi r18, 0x07 ; 7   
+    .data:0x00000baa    e9e0    ldi r30, 0x09 ; 9   
+    .data:0x00000bac    e217    cp r30, r18 
+    .data:0x00000bae    38f0    brcs .+14 ; 0x00000bbe  
+    .data:0x00000bb0    62d2    rcall .+1220 ; 0x00001076   
+    .data:0x00000bb2    e757    subi r30, 0x77 ; 119    
+    .data:0x00000bb4    fe4f    sbci r31, 0xFE ; 254    
+    .data:0x00000bb6    e081    ld r30, Z   
+    .data:0x00000bb8    3e0f    add r19, r30    
+    .data:0x00000bba    2f5f    subi r18, 0xFF ; 255    
+    .data:0x00000bbc    f6cf    rjmp .-20 ; 0x00000baa  
+    .data:0x00000bbe    30939301    sts 0x0193, r19 
+    .data:0x00000bc2    e0918f01    lds r30, 0x018F 
+    .data:0x00000bc6    5ad2    rcall .+1204 ; 0x0000107c   
+    .data:0x00000bc8    5369    ori r21, 0x93 ; 147 
+    .data:0x00000bca    5cd2    rcall .+1208 ; 0x00001084   
+    .data:0x00000bcc    e0919001    lds r30, 0x0190 
+    .data:0x00000bd0    55d2    rcall .+1194 ; 0x0000107c   
+    .data:0x00000bd2    5469    ori r21, 0x94 ; 148 
+    .data:0x00000bd4    57d2    rcall .+1198 ; 0x00001084   
+    .data:0x00000bd6    e0919101    lds r30, 0x0191 
+    .data:0x00000bda    50d2    rcall .+1184 ; 0x0000107c   
+    .data:0x00000bdc    5569    ori r21, 0x95 ; 149 
+    .data:0x00000bde    52d2    rcall .+1188 ; 0x00001084   
+    .data:0x00000be0    e0919201    lds r30, 0x0192 
+    .data:0x00000be4    4bd2    rcall .+1174 ; 0x0000107c   
+    .data:0x00000be6    5669    ori r21, 0x96 ; 150 
+    .data:0x00000be8    4dd2    rcall .+1178 ; 0x00001084   
+    .data:0x00000bea    4fd2    rcall .+1182 ; 0x0000108a   
+    .data:0x00000bec    19f0    breq .+6 ; 0x00000bf4   
+    .data:0x00000bee    50d2    rcall .+1184 ; 0x00001090   
+    .data:0x00000bf0    52d2    rcall .+1188 ; 0x00001096   
+    .data:0x00000bf2    54d2    rcall .+1192 ; 0x0000109c   
+    .data:0x00000bf4    87df    rcall .-242 ; 0x00000b04    
+    .data:0x00000bf6    09e8    ldi r16, 0x89 ; 137 
+    .data:0x00000bf8    11e0    ldi r17, 0x01 ; 1   
+    .data:0x00000bfa    1a93    st -Y, r17  
+    .data:0x00000bfc    0a93    st -Y, r16  
+    .data:0x00000bfe    d9d0    rcall .+434 ; 0x00000db2    
+    .data:0x00000c00    87df    rcall .-242 ; 0x00000b10    
+    .data:0x00000c02    89c0    rjmp .+274 ; 0x00000d16 
+    .data:0x00000c04    2397    sbiw r28, 0x03 ; 3  
+    .data:0x00000c06    79d2    rcall .+1266 ; 0x000010fa   
+    .data:0x00000c08    e5e5    ldi r30, 0x55 ; 85  
+    .data:0x00000c0a    e0939401    sts 0x0194, r30 
+    .data:0x00000c0e    e0939501    sts 0x0195, r30 
+    .data:0x00000c12    e0939601    sts 0x0196, r30 
+    .data:0x00000c16    e0939701    sts 0x0197, r30 
+    .data:0x00000c1a    e0939801    sts 0x0198, r30 
+    .data:0x00000c1e    e0939901    sts 0x0199, r30 
+    .data:0x00000c22    e0918c01    lds r30, 0x018C 
+    .data:0x00000c26    e0939a01    sts 0x019A, r30 
+    .data:0x00000c2a    e0918d01    lds r30, 0x018D 
+    .data:0x00000c2e    e0939b01    sts 0x019B, r30 
+    .data:0x00000c32    e0918e01    lds r30, 0x018E 
+    .data:0x00000c36    e0939c01    sts 0x019C, r30 
+    .data:0x00000c3a    e0918f01    lds r30, 0x018F 
+    .data:0x00000c3e    e0939d01    sts 0x019D, r30 
+    .data:0x00000c42    e0919001    lds r30, 0x0190 
+    .data:0x00000c46    e0939e01    sts 0x019E, r30 
+    .data:0x00000c4a    e0919101    lds r30, 0x0191 
+    .data:0x00000c4e    e0939f01    sts 0x019F, r30 
+    .data:0x00000c52    e0919201    lds r30, 0x0192 
+    .data:0x00000c56    e093a001    sts 0x01A0, r30 
+    .data:0x00000c5a    e985    ldd r30, Y+9 ; 0x09 
+    .data:0x00000c5c    e2d1    rcall .+964 ; 0x00001022    
+    .data:0x00000c5e    ede9    ldi r30, 0x9D ; 157 
+    .data:0x00000c60    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000c62    edd1    rcall .+986 ; 0x0000103e    
+    .data:0x00000c64    ede9    ldi r30, 0x9D ; 157 
+    .data:0x00000c66    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000c68    ff93    push r31    
+    .data:0x00000c6a    ef93    push r30    
+    .data:0x00000c6c    edd1    rcall .+986 ; 0x00001048    
+    .data:0x00000c6e    af91    pop r26 
+    .data:0x00000c70    bf91    pop r27 
+    .data:0x00000c72    ec93    st X, r30   
+    .data:0x00000c74    eee9    ldi r30, 0x9E ; 158 
+    .data:0x00000c76    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000c78    e2d1    rcall .+964 ; 0x0000103e    
+    .data:0x00000c7a    eee9    ldi r30, 0x9E ; 158 
+    .data:0x00000c7c    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000c7e    ff93    push r31    
+    .data:0x00000c80    ef93    push r30    
+    .data:0x00000c82    e6d1    rcall .+972 ; 0x00001050    
+    .data:0x00000c84    af91    pop r26 
+    .data:0x00000c86    bf91    pop r27 
+    .data:0x00000c88    ec93    st X, r30   
+    .data:0x00000c8a    efe9    ldi r30, 0x9F ; 159 
+    .data:0x00000c8c    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000c8e    d7d1    rcall .+942 ; 0x0000103e    
+    .data:0x00000c90    efe9    ldi r30, 0x9F ; 159 
+    .data:0x00000c92    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000c94    ff93    push r31    
+    .data:0x00000c96    ef93    push r30    
+    .data:0x00000c98    dfd1    rcall .+958 ; 0x00001058    
+    .data:0x00000c9a    af91    pop r26 
+    .data:0x00000c9c    bf91    pop r27 
+    .data:0x00000c9e    ec93    st X, r30   
+    .data:0x00000ca0    e0ea    ldi r30, 0xA0 ; 160 
+    .data:0x00000ca2    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000ca4    ddd1    rcall .+954 ; 0x00001060    
+    .data:0x00000ca6    e0ea    ldi r30, 0xA0 ; 160 
+    .data:0x00000ca8    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000caa    ff93    push r31    
+    .data:0x00000cac    ef93    push r30    
+    .data:0x00000cae    ddd1    rcall .+954 ; 0x0000106a    
+    .data:0x00000cb0    af91    pop r26 
+    .data:0x00000cb2    bf91    pop r27 
+    .data:0x00000cb4    ec93    st X, r30   
+    .data:0x00000cb6    ede9    ldi r30, 0x9D ; 157 
+    .data:0x00000cb8    f1e0    ldi r31, 0x01 ; 1   
+    .data:0x00000cba    3081    ld r19, Z   
+    .data:0x00000cbc    2ae0    ldi r18, 0x0A ; 10  
+    .data:0x00000cbe    ece0    ldi r30, 0x0C ; 12  
+    .data:0x00000cc0    e217    cp r30, r18 
+    .data:0x00000cc2    38f0    brcs .+14 ; 0x00000cd2  
+    .data:0x00000cc4    d8d1    rcall .+944 ; 0x00001076    
+    .data:0x00000cc6    ec56    subi r30, 0x6C ; 108    
+    .data:0x00000cc8    fe4f    sbci r31, 0xFE ; 254    
+    .data:0x00000cca    e081    ld r30, Z   
+    .data:0x00000ccc    3e0f    add r19, r30    
+    .data:0x00000cce    2f5f    subi r18, 0xFF ; 255    
+    .data:0x00000cd0    f6cf    rjmp .-20 ; 0x00000cbe  
+    .data:0x00000cd2    3093a101    sts 0x01A1, r19 
+    .data:0x00000cd6    e0919d01    lds r30, 0x019D 
+    .data:0x00000cda    d0d1    rcall .+928 ; 0x0000107c    
+    .data:0x00000cdc    5369    ori r21, 0x93 ; 147 
+    .data:0x00000cde    d2d1    rcall .+932 ; 0x00001084    
+    .data:0x00000ce0    e0919e01    lds r30, 0x019E 
+    .data:0x00000ce4    cbd1    rcall .+918 ; 0x0000107c    
+    .data:0x00000ce6    5469    ori r21, 0x94 ; 148 
+    .data:0x00000ce8    cdd1    rcall .+922 ; 0x00001084    
+    .data:0x00000cea    e0919f01    lds r30, 0x019F 
+    .data:0x00000cee    c6d1    rcall .+908 ; 0x0000107c    
+    .data:0x00000cf0    5569    ori r21, 0x95 ; 149 
+    .data:0x00000cf2    c8d1    rcall .+912 ; 0x00001084    
+    .data:0x00000cf4    e091a001    lds r30, 0x01A0 
+    .data:0x00000cf8    c1d1    rcall .+898 ; 0x0000107c    
+    .data:0x00000cfa    5669    ori r21, 0x96 ; 150 
+    .data:0x00000cfc    c3d1    rcall .+902 ; 0x00001084    
+    .data:0x00000cfe    c5d1    rcall .+906 ; 0x0000108a    
+    .data:0x00000d00    19f0    breq .+6 ; 0x00000d08   
+    .data:0x00000d02    c6d1    rcall .+908 ; 0x00001090    
+    .data:0x00000d04    c8d1    rcall .+912 ; 0x00001096    
+    .data:0x00000d06    cad1    rcall .+916 ; 0x0000109c    
+    .data:0x00000d08    fdde    rcall .-518 ; 0x00000b04    
+    .data:0x00000d0a    04e9    ldi r16, 0x94 ; 148 
+    .data:0x00000d0c    11e0    ldi r17, 0x01 ; 1   
+    .data:0x00000d0e    1a93    st -Y, r17  
+    .data:0x00000d10    0a93    st -Y, r16  
+    .data:0x00000d12    45d0    rcall .+138 ; 0x00000d9e    
+    .data:0x00000d14    fdde    rcall .-518 ; 0x00000b10    
+    .data:0x00000d16    f8d1    rcall .+1008 ; 0x00001108   
+    .data:0x00000d18    2a96    adiw r28, 0x0a ; 10 
+    .data:0x00000d1a    0895    ret 
+    .data:0x00000d1c    f0d1    rcall .+992 ; 0x000010fe    
+    .data:0x00000d1e    7adb    rcall .-2316 ; 0x00000414   Get Byte 0 from EEPROM
+    .data:0x00000d20    0e2f    mov r16, r30    
+    .data:0x00000d22    7cdb    rcall .-2312 ; 0x0000041c   Get Byte 1 from EEPROM
+    .data:0x00000d24    1e2f    mov r17, r30    
+    .data:0x00000d26    7edb    rcall .-2308 ; 0x00000424   Get Byte 2 from EEPROM
+    .data:0x00000d28    2e2f    mov r18, r30    
+    .data:0x00000d2a    bbd1    rcall .+886 ; 0x000010a2    Funky Stuff
+    .data:0x00000d2c    e470    andi r30, 0x04 ; 4  
+    .data:0x00000d2e    3e2f    mov r19, r30    
+    .data:0x00000d30    e02f    mov r30, r16    
+    .data:0x00000d32    dbd1    rcall .+950 ; 0x000010ea    r30 = r30 * 8
+    .data:0x00000d34    e87f    andi r30, 0xF8 ; 248    
+    .data:0x00000d36    3e2b    or r19, r30 
+    .data:0x00000d38    e12f    mov r30, r17    
+    .data:0x00000d3a    e295    swap r30    
+    .data:0x00000d3c    ef70    andi r30, 0x0F ; 15 
+    .data:0x00000d3e    e695    lsr r30 
+    .data:0x00000d40    e695    lsr r30 
+    .data:0x00000d42    e695    lsr r30 
+    .data:0x00000d44    e170    andi r30, 0x01 ; 1  
+    .data:0x00000d46    3e2b    or r19, r30 
+    .data:0x00000d48    30938f01    sts 0x018F, r19         Store First Byte Value in 0x18F
+    .data:0x00000d4c    e02f    mov r30, r16    
+    .data:0x00000d4e    e295    swap r30    
+    .data:0x00000d50    ef70    andi r30, 0x0F ; 15 
+    .data:0x00000d52    e695    lsr r30 
+    .data:0x00000d54    e695    lsr r30 
+    .data:0x00000d56    aad1    rcall .+852 ; 0x000010ac    Funky Stuff
+    .data:0x00000d58    ee0f    add r30, r30    
+    .data:0x00000d5a    ec7f    andi r30, 0xFC ; 252    
+    .data:0x00000d5c    3e2b    or r19, r30 
+    .data:0x00000d5e    30939001    sts 0x0190, r19         Store Second Byte Value in 0x190
+    .data:0x00000d62    9fd1    rcall .+830 ; 0x000010a2    More Funky Stuff
+    .data:0x00000d64    a3d1    rcall .+838 ; 0x000010ac    Funky Stuff
+    .data:0x00000d66    e295    swap r30    
+    .data:0x00000d68    e07f    andi r30, 0xF0 ; 240    
+    .data:0x00000d6a    ee0f    add r30, r30    
+    .data:0x00000d6c    ee0f    add r30, r30    
+    .data:0x00000d6e    ee0f    add r30, r30    
+    .data:0x00000d70    e078    andi r30, 0x80 ; 128    
+    .data:0x00000d72    3e2b    or r19, r30 
+    .data:0x00000d74    e22f    mov r30, r18    
+    .data:0x00000d76    e695    lsr r30 
+    .data:0x00000d78    ec77    andi r30, 0x7C ; 124    
+    .data:0x00000d7a    3e2b    or r19, r30 
+    .data:0x00000d7c    30939101    sts 0x0191, r19         Store Third Byte Value in 0x191
+    .data:0x00000d80    e22f    mov r30, r18    
+    .data:0x00000d82    e295    swap r30    
+    .data:0x00000d84    e07f    andi r30, 0xF0 ; 240    
+    .data:0x00000d86    ee0f    add r30, r30    
+    .data:0x00000d88    e07e    andi r30, 0xE0 ; 224    
+    .data:0x00000d8a    3e2f    mov r19, r30    
+    .data:0x00000d8c    e22f    mov r30, r18    
+    .data:0x00000d8e    e295    swap r30    
+    .data:0x00000d90    e071    andi r30, 0x10 ; 16 
+    .data:0x00000d92    3e2b    or r19, r30 
+    .data:0x00000d94    30939201    sts 0x0192, r19         Store Fourth (XOR?) Value in 0x192
+    .data:0x00000d98    b9d1    rcall .+882 ; 0x0000110c    Load from pointers Y, Y+1, Y+2, Y+3, into r16, r17, r18, r19
+    .data:0x00000d9a    2496    adiw r28, 0x04 ; 4          Adds four to the register pair r28, r29
+    .data:0x00000d9c    0895    ret                         -Return-
+    .data:0x00000d9e    8ad1    rcall .+788 ; 0x000010b4    
+    .data:0x00000da0    899a    sbi 0x11, 1 ; 17    
+    .data:0x00000da2    f894    cli 
+    .data:0x00000da4    a881    ld r26, Y   
+    .data:0x00000da6    b981    ldd r27, Y+1 ; 0x01 
+    .data:0x00000da8    68e0    ldi r22, 0x08 ; 8   
+    .data:0x00000daa    7ee0    ldi r23, 0x0E ; 14  
+    .data:0x00000dac    09c0    rjmp .+18 ; 0x00000dc0  
+    .data:0x00000dae    2296    adiw r28, 0x02 ; 2  
+    .data:0x00000db0    0895    ret 
+    .data:0x00000db2    80d1    rcall .+768 ; 0x000010b4    
+    .data:0x00000db4    899a    sbi 0x11, 1 ; 17    
+    .data:0x00000db6    f894    cli 
+    .data:0x00000db8    a881    ld r26, Y   
+    .data:0x00000dba    b981    ldd r27, Y+1 ; 0x01 
+    .data:0x00000dbc    68e0    ldi r22, 0x08 ; 8   
+    .data:0x00000dbe    7be0    ldi r23, 0x0B ; 11  
+    .data:0x00000dc0    8c91    ld r24, X   
+    .data:0x00000dc2    1196    adiw r26, 0x01 ; 1  
+    .data:0x00000dc4    87ff    sbrs r24, 7 
+    .data:0x00000dc6    05c0    rjmp .+10 ; 0x00000dd2  
+    .data:0x00000dc8    0000    nop 
+    .data:0x00000dca    0000    nop 
+    .data:0x00000dcc    0000    nop 
+    .data:0x00000dce    919a    sbi 0x12, 1 ; 18    
+    .data:0x00000dd0    05c0    rjmp .+10 ; 0x00000ddc  
+    .data:0x00000dd2    0000    nop 
+    .data:0x00000dd4    0000    nop 
+    .data:0x00000dd6    9198    cbi 0x12, 1 ; 18    
+    .data:0x00000dd8    0000    nop 
+    .data:0x00000dda    0000    nop 
+    .data:0x00000ddc    6150    subi r22, 0x01 ; 1  
+    .data:0x00000dde    71f0    breq .+28 ; 0x00000dfc  
+    .data:0x00000de0    880f    add r24, r24    
+    .data:0x00000de2    0000    nop 
+    .data:0x00000de4    0000    nop 
+    .data:0x00000de6    0000    nop 
+    .data:0x00000de8    0000    nop 
+    .data:0x00000dea    0000    nop 
+    .data:0x00000dec    0000    nop 
+    .data:0x00000dee    0000    nop 
+    .data:0x00000df0    0000    nop 
+    .data:0x00000df2    0000    nop 
+    .data:0x00000df4    0000    nop 
+    .data:0x00000df6    0000    nop 
+    .data:0x00000df8    0000    nop 
+    .data:0x00000dfa    e4cf    rjmp .-56 ; 0x00000dc4  
+    .data:0x00000dfc    7150    subi r23, 0x01 ; 1  
+    .data:0x00000dfe    39f0    breq .+14 ; 0x00000e0e  
+    .data:0x00000e00    68e0    ldi r22, 0x08 ; 8   
+    .data:0x00000e02    0000    nop 
+    .data:0x00000e04    0000    nop 
+    .data:0x00000e06    0000    nop 
+    .data:0x00000e08    0000    nop 
+    .data:0x00000e0a    0000    nop 
+    .data:0x00000e0c    d9cf    rjmp .-78 ; 0x00000dc0  
+    .data:0x00000e0e    7894    sei 
+    .data:0x00000e10    95e0    ldi r25, 0x05 ; 5   
+    .data:0x00000e12    9150    subi r25, 0x01 ; 1  
+    .data:0x00000e14    f1f7    brne .-4 ; 0x00000e12   
+    .data:0x00000e16    8998    cbi 0x11, 1 ; 17    
+    .data:0x00000e18    2296    adiw r28, 0x02 ; 2  
+    .data:0x00000e1a    0895    ret 
+    .data:0x00000e1c    e4e0    ;;;; ldi r30, 0x04 ; 4   ; start
+    .data:0x00000e1e    f0e0    ldi r31, 0x00 ; 0   ; "
+    .data:0x00000e20    e0936e01    sts 0x016E, r30 ; set 0x016E to 4
+    .data:0x00000e24    f0936f01    sts 0x016F, r31 ; set 0x016F to 0
+    .data:0x00000e28    0895    ret                 ; end
+    .data:0x00000e2a    e5e0    ;;;; ldi r30, 0x05 ; 5   ; start     ;  can change to efef if want to be very slow
+    .data:0x00000e2c    f0e0    ldi r31, 0x00 ; 0   ; "
+    .data:0x00000e2e    e0937001    sts 0x0170, r30 ; set 0x0170 to 5
+    .data:0x00000e32    f0937101    sts 0x0171, r31 ; set 0x0171 to 0
+    .data:0x00000e36    0895    ret                 ; end
+    .data:0x00000e38    e0916c01    lds r30, 0x016C 
+    .data:0x00000e3c    f0916d01    lds r31, 0x016D 
+    .data:0x00000e40    3097    sbiw r30, 0x00 ; 0  
+    .data:0x00000e42    0895    ret 
+    .data:0x00000e44    e0916901    lds r30, 0x0169 
+    .data:0x00000e48    e030    cpi r30, 0x00 ; 0   
+    .data:0x00000e4a    0895    ret 
+    .data:0x00000e4c    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000e4e    e0936701    sts 0x0167, r30 
+    .data:0x00000e52    0895    ret 
+    .data:0x00000e54    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000e56    f0e0    ldi r31, 0x00 ; 0   
+    .data:0x00000e58    fa93    st -Y, r31  
+    .data:0x00000e5a    ea93    st -Y, r30  
+    .data:0x00000e5c    c1ca    rjmp .-2686 ; 0x000003e0    
+    .data:0x00000e5e    a0916201    lds r26, 0x0162 
+    .data:0x00000e62    af3f    cpi r26, 0xFF ; 255 
+    .data:0x00000e64    0895    ret 
+    .data:0x00000e66    fa93    st -Y, r31  
+    .data:0x00000e68    ea93    st -Y, r30  
+    .data:0x00000e6a    00cc    rjmp .-2048 ; 0x0000066c    
+    .data:0x00000e6c    fa93    st -Y, r31  
+    .data:0x00000e6e    ea93    st -Y, r30  
+    .data:0x00000e70    57ce    rjmp .-850 ; 0x00000b20 
+    .data:0x00000e72    e8e1    ldi r30, 0x18 ; 24  
+    .data:0x00000e74    f5e1    ldi r31, 0x15 ; 21  
+    .data:0x00000e76    e0936a01    sts 0x016A, r30 
+    .data:0x00000e7a    f0936b01    sts 0x016B, r31 
+    .data:0x00000e7e    0895    ret 
+    .data:0x00000e80    e0916201    lds r30, 0x0162 
+    .data:0x00000e84    e230    cpi r30, 0x02 ; 2   
+    .data:0x00000e86    0895    ret 
+    .data:0x00000e88    e02f    mov r30, r16    
+    .data:0x00000e8a    f0e0    ldi r31, 0x00 ; 0   
+    .data:0x00000e8c    0895    ret 
+    .data:0x00000e8e    e4e0    ldi r30, 0x04 ; 4   
+    .data:0x00000e90    ea93    st -Y, r30  
+    .data:0x00000e92    0895    ret 
+    .data:0x00000e94    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000e96    ea93    st -Y, r30  
+    .data:0x00000e98    bacb    rjmp .-2188 ; 0x0000060e    
+    .data:0x00000e9a    e0936001    sts 0x0160, r30 
+    .data:0x00000e9e    f0936101    sts 0x0161, r31 
+    .data:0x00000ea2    fa93    st -Y, r31  
+    .data:0x00000ea4    ea93    st -Y, r30  
+    .data:0x00000ea6    23cd    rjmp .-1466 ; 0x000008ee    
+    .data:0x00000ea8    e3e0    ldi r30, 0x03 ; 3   
+    .data:0x00000eaa    e0936301    sts 0x0163, r30 
+    .data:0x00000eae    0895    ret 
+    .data:0x00000eb0    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x00000eb2    e0936601    sts 0x0166, r30 
+    .data:0x00000eb6    0895    ret 
+    .data:0x00000eb8    a7db    rcall .-2226 ; 0x00000608   
+    .data:0x00000eba    e0916501    lds r30, 0x0165 
+    .data:0x00000ebe    a0916401    lds r26, 0x0164 
+    .data:0x00000ec2    ea2b    or r30, r26 
+    .data:0x00000ec4    ea93    st -Y, r30  
+    .data:0x00000ec6    0895    ret 
+    .data:0x00000ec8    5524    eor r5, r5  
+    .data:0x00000eca    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x00000ecc    f0e0    ldi r31, 0x00 ; 0   
+    .data:0x00000ece    e0936c01    sts 0x016C, r30 
+    .data:0x00000ed2    f0936d01    sts 0x016D, r31 
+    .data:0x00000ed6    e5e0    ldi r30, 0x05 ; 5   
+    .data:0x00000ed8    0895    ret 
+    .data:0x00000eda    e3e0    ldi r30, 0x03 ; 3   
+    .data:0x00000edc    ea93    st -Y, r30  
+    .data:0x00000ede    0895    ret 
+    .data:0x00000ee0    e7e0    ldi r30, 0x07 ; 7   
+    .data:0x00000ee2    e0936301    sts 0x0163, r30 
+    .data:0x00000ee6    0895    ret 
+    .data:0x00000ee8    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x00000eea    e515    cp r30, r5  
+    .data:0x00000eec    0895    ret 
+    .data:0x00000eee    e2e0    ldi r30, 0x02 ; 2   
+    .data:0x00000ef0    ea93    st -Y, r30  
+    .data:0x00000ef2    0895    ret 
+    .data:0x00000ef4    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x00000ef6    ea93    st -Y, r30  
+    .data:0x00000ef8    8acb    rjmp .-2284 ; 0x0000060e    
+    .data:0x00000efa    e4e0    ldi r30, 0x04 ; 4     CALLED MULTIPLE TIMES: sets 0x0163 to 4 
+    .data:0x00000efc    e0936301    sts 0x0163, r30 
+    .data:0x00000f00    0895    ret 
+    .data:0x00000f02    e4e6    ldi r30, 0x64 ; 100 
+    .data:0x00000f04    e0936901    sts 0x0169, r30 
+    .data:0x00000f08    0895    ret 
+    .data:0x00000f0a    e0ed    ;e0ed    ; 208 instead asdf ; e3e6   ldi r30, 0x63 ; 99    ; Write 99 to Timer/Counter0 ; OVERCLOCK CODE
+    .data:0x00000f0c    e2bf    out 0x32, r30 ; 50 ; if you NOP this code, the button LEDs slow back down (from changing the timer from 99 to 200s)
+    .data:0x00000f0e    0895    ret 
+    .data:0x00000f10    e0e0    ldi r30, 0x00 ; 0       Load 0 into r30
+    .data:0x00000f12    e0937b01    sts 0x017B, r30     Store r30 in 0x17B
+    .data:0x00000f16    0895    ret                     -Return-
+    .data:0x00000f18    e0e0    ldi r30, 0x00 ; 0       Load 0 into r30
+    .data:0x00000f1a    e0937801    sts 0x0178, r30     Store r30 in 0x178
+    .data:0x00000f1e    0895    ret                     -Return-
+    .data:0x00000f20    e1e0    ldi r30, 0x01 ; 1       Load 1 into r30
+    .data:0x00000f22    e0937901    sts 0x0179, r30     Store r30 in 0x0179
+    .data:0x00000f26    e0e0    ldi r30, 0x00 ; 0       Load 0 into r30
+    .data:0x00000f28    e0937a01    sts 0x017A, r30     Store r30 in 0x017A
+    .data:0x00000f2c    0895    ret                     -Return-
+    .data:0x00000f2e    e0917a01    lds r30, 0x017A     Load 0x17A into r30
+    .data:0x00000f32    ef5f    subi r30, 0xFF ; 255    Subtract 255
+    .data:0x00000f34    e0937a01    sts 0x017A, r30     Store 0x17A
+    .data:0x00000f38    a0917a01    lds r26, 0x017A     Load 0x17A into r26
+    .data:0x00000f3c    e8ec    ldi r30, 0xC8 ; 200     Load 200 into r30
+    .data:0x00000f3e    ea17    cp r30, r26             Compare r30 and r26
+    .data:0x00000f40    0895    ret                     -Return-
+    .data:0x00000f42    e0e0    ldi r30, 0x00 ; 0       Load 0 into r30
+    .data:0x00000f44    e0937a01    sts 0x017A, r30     Store 0 in 0x017A
+    .data:0x00000f48    e0937901    sts 0x0179, r30     Store 0 in 0x0179
+    .data:0x00000f4c    e1e1    ldi r30, 0x11 ; 17      Load 17 into r30
+    .data:0x00000f4e    0895    ret                     -Return-
+    .data:0x00000f50    e0917901    lds r30, 0x0179     Load 0x0179 into r30
+    .data:0x00000f54    e030    cpi r30, 0x00 ; 0       Compare r30 with 0
+    .data:0x00000f56    0895    ret                     -Return-
+    .data:0x00000f58    a0917701    lds r26, 0x0177     Load 0x0177 into r26
+    .data:0x00000f5c    0a17    cp r16, r26             Compare masked button value with r26
+    .data:0x00000f5e    0895    ret                     -Return-
+    .data:0x00000f60    e5e0    ldi r30, 0x05 ; 5   
+    .data:0x00000f62    ea93    st -Y, r30  
+    .data:0x00000f64    0895    ret 
+    .data:0x00000f66    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000f68    ea93    st -Y, r30  
+    .data:0x00000f6a    5acc    rjmp .-1868 ; 0x00000820    
+    .data:0x00000f6c    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x00000f6e    ea93    st -Y, r30  
+    .data:0x00000f70    57cc    rjmp .-1874 ; 0x00000820    
+    .data:0x00000f72    e2e3    ldi r30, 0x32 ; 50  
+    .data:0x00000f74    e0937e01    sts 0x017E, r30 
+    .data:0x00000f78    0895    ret 
+    .data:0x00000f7a    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000f7c    e0937f01    sts 0x017F, r30 
+    .data:0x00000f80    0895    ret 
+    .data:0x00000f82    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000f84    e0938001    sts 0x0180, r30 
+    .data:0x00000f88    e0938101    sts 0x0181, r30 
+    .data:0x00000f8c    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000f8e    e0938401    sts 0x0184, r30 
+    .data:0x00000f92    e0938501    sts 0x0185, r30 
+    .data:0x00000f96    0895    ret 
+    .data:0x00000f98    e0e0    ldi r30, 0x00 ; 0   
+    .data:0x00000f9a    e0938601    sts 0x0186, r30 
+    .data:0x00000f9e    0895    ret 
+    .data:0x00000fa0    ea93    st -Y, r30  
+    .data:0x00000fa2    26cc    rjmp .-1972 ; 0x000007f0    
+    .data:0x00000fa4    a881    ld r26, Y   
+    .data:0x00000fa6    a130    cpi r26, 0x01 ; 1   
+    .data:0x00000fa8    0895    ret 
+    .data:0x00000faa    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x00000fac    e0938601    sts 0x0186, r30 
+    .data:0x00000fb0    0895    ret 
+    .data:0x00000fb2    eae0    ldi r30, 0x0A ; 10  
+    .data:0x00000fb4    e0938201    sts 0x0182, r30 
+    .data:0x00000fb8    0895    ret 
+    .data:0x00000fba    9fd0    rcall .+318 ; 0x000010fa    
+    .data:0x00000fbc    e985    ldd r30, Y+9 ; 0x09 
+    .data:0x00000fbe    0895    ret 
+    .data:0x00000fc0    ee81    ldd r30, Y+6 ; 0x06 
+    .data:0x00000fc2    ff81    ldd r31, Y+7 ; 0x07 
+    .data:0x00000fc4    0e17    cp r16, r30 
+    .data:0x00000fc6    1f07    cpc r17, r31    
+    .data:0x00000fc8    0895    ret 
+    .data:0x00000fca    e22f    mov r30, r18    
+    .data:0x00000fcc    f32f    mov r31, r19    
+    .data:0x00000fce    3196    adiw r30, 0x01 ; 1  
+    .data:0x00000fd0    4e2f    mov r20, r30    
+    .data:0x00000fd2    5f2f    mov r21, r31    
+    .data:0x00000fd4    0895    ret 
+    .data:0x00000fd6    e0918001    lds r30, 0x0180 
+    .data:0x00000fda    f0918101    lds r31, 0x0181 
+    .data:0x00000fde    3097    sbiw r30, 0x00 ; 0  
+    .data:0x00000fe0    0895    ret 
+    .data:0x00000fe2    e0918401    lds r30, 0x0184 
+    .data:0x00000fe6    f0918501    lds r31, 0x0185 
+    .data:0x00000fea    3097    sbiw r30, 0x00 ; 0  
+    .data:0x00000fec    0895    ret 
+    .data:0x00000fee    a881    ld r26, Y   
+    .data:0x00000ff0    a530    cpi r26, 0x05 ; 5   
+    .data:0x00000ff2    0895    ret 
+    .data:0x00000ff4    a881    ld r26, Y   
+    .data:0x00000ff6    a330    cpi r26, 0x03 ; 3   
+    .data:0x00000ff8    0895    ret 
+    .data:0x00000ffa    a881    ld r26, Y   
+    .data:0x00000ffc    a230    cpi r26, 0x02 ; 2   
+    .data:0x00000ffe    0895    ret 
+    .data:0x00001000    e881    ld r30, Y   
+    .data:0x00001002    e030    cpi r30, 0x00 ; 0   
+    .data:0x00001004    0895    ret 
+    .data:0x00001006    a881    ld r26, Y   
+    .data:0x00001008    a430    cpi r26, 0x04 ; 4   
+    .data:0x0000100a    0895    ret 
+    .data:0x0000100c    e8ef    ldi r30, 0xF8 ; 248 
+    .data:0x0000100e    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x00001010    2dcf    rjmp .-422 ; 0x00000e6c 
+    .data:0x00001012    e0eb    ldi r30, 0xB0 ; 176 
+    .data:0x00001014    fbe8    ldi r31, 0x8B ; 139 
+    .data:0x00001016    2acf    rjmp .-428 ; 0x00000e6c 
+    .data:0x00001018    e0e8    ldi r30, 0x80 ; 128 
+    .data:0x0000101a    f8e8    ldi r31, 0x88 ; 136 
+    .data:0x0000101c    27cf    rjmp .-434 ; 0x00000e6c 
+    .data:0x0000101e    0a93    st -Y, r16  
+    .data:0x00001020    12ca    rjmp .-3036 ; 0x00000446    
+    .data:0x00001022    e295    swap r30    
+    .data:0x00001024    ef70    andi r30, 0x0F ; 15 
+    .data:0x00001026    e695    lsr r30 
+    .data:0x00001028    e270    andi r30, 0x02 ; 2  
+    .data:0x0000102a    e887    std Y+8, r30 ; 0x08 
+    .data:0x0000102c    e985    ldd r30, Y+9 ; 0x09 
+    .data:0x0000102e    e295    swap r30    
+    .data:0x00001030    e270    andi r30, 0x02 ; 2  
+    .data:0x00001032    ef83    std Y+7, r30 ; 0x07 
+    .data:0x00001034    e985    ldd r30, Y+9 ; 0x09 
+    .data:0x00001036    5dd0    rcall .+186 ; 0x000010f2    
+    .data:0x00001038    e270    andi r30, 0x02 ; 2  
+    .data:0x0000103a    ee83    std Y+6, r30 ; 0x06 
+    .data:0x0000103c    0895    ret 
+    .data:0x0000103e    df01    movw r26, r30   
+    .data:0x00001040    ec91    ld r30, X   
+    .data:0x00001042    ed7f    andi r30, 0xFD ; 253    
+    .data:0x00001044    ec93    st X, r30   
+    .data:0x00001046    0895    ret 
+    .data:0x00001048    e081    ld r30, Z   
+    .data:0x0000104a    a885    ldd r26, Y+8 ; 0x08 
+    .data:0x0000104c    ea2b    or r30, r26 
+    .data:0x0000104e    0895    ret 
+    .data:0x00001050    e081    ld r30, Z   
+    .data:0x00001052    af81    ldd r26, Y+7 ; 0x07 
+    .data:0x00001054    ea2b    or r30, r26 
+    .data:0x00001056    0895    ret 
+    .data:0x00001058    e081    ld r30, Z   
+    .data:0x0000105a    ae81    ldd r26, Y+6 ; 0x06 
+    .data:0x0000105c    ea2b    or r30, r26 
+    .data:0x0000105e    0895    ret 
+    .data:0x00001060    df01    movw r26, r30   
+    .data:0x00001062    ec91    ld r30, X   
+    .data:0x00001064    e07f    andi r30, 0xF0 ; 240    
+    .data:0x00001066    ec93    st X, r30   
+    .data:0x00001068    0895    ret 
+    .data:0x0000106a    e081    ld r30, Z   
+    .data:0x0000106c    ae2f    mov r26, r30    
+    .data:0x0000106e    e985    ldd r30, Y+9 ; 0x09 
+    .data:0x00001070    ef70    andi r30, 0x0F ; 15 
+    .data:0x00001072    ea2b    or r30, r26 
+    .data:0x00001074    0895    ret 
+    .data:0x00001076    e22f    mov r30, r18    
+    .data:0x00001078    f0e0    ldi r31, 0x00 ; 0   
+    .data:0x0000107a    0895    ret 
+    .data:0x0000107c    f0e0    ldi r31, 0x00 ; 0   
+    .data:0x0000107e    4e2f    mov r20, r30    
+    .data:0x00001080    5f2f    mov r21, r31    
+    .data:0x00001082    0895    ret 
+    .data:0x00001084    5a93    st -Y, r21  
+    .data:0x00001086    4a93    st -Y, r20  
+    .data:0x00001088    4bcd    rjmp .-1386 ; 0x00000b20    
+    .data:0x0000108a    fdd7    rcall .+4090 ; 0x00002086   
+    .data:0x0000108c    e030    cpi r30, 0x00 ; 0   
+    .data:0x0000108e    0895    ret 
+    .data:0x00001090    e5e5    ldi r30, 0x55 ; 85  
+    .data:0x00001092    f3e9    ldi r31, 0x93 ; 147 
+    .data:0x00001094    ebce    rjmp .-554 ; 0x00000e6c 
+    .data:0x00001096    e5e5    ldi r30, 0x55 ; 85  
+    .data:0x00001098    f4e9    ldi r31, 0x94 ; 148 
+    .data:0x0000109a    e8ce    rjmp .-560 ; 0x00000e6c 
+    .data:0x0000109c    e5e5    ldi r30, 0x55 ; 85  
+    .data:0x0000109e    f5e9    ldi r31, 0x95 ; 149 
+    .data:0x000010a0    e5ce    rjmp .-566 ; 0x00000e6c 
+    .data:0x000010a2    e02f    mov r30, r16            Put Byte 0 from EEPROM in r30
+    .data:0x000010a4    e295    swap r30                Flip Low and High
+    .data:0x000010a6    ef70    andi r30, 0x0F ; 15     And it with 15
+    .data:0x000010a8    e695    lsr r30                 Shift it right
+    .data:0x000010aa    0895    ret                     -Return-
+    .data:0x000010ac    e170    andi r30, 0x01 ; 1      And r30 with 1
+    .data:0x000010ae    3e2f    mov r19, r30            Move it into r19
+    .data:0x000010b0    e12f    mov r30, r17            Move r17 into r30
+    .data:0x000010b2    0895    ret                     -Return-
+    .data:0x000010b4    e881    ld r30, Y   
+    .data:0x000010b6    f981    ldd r31, Y+1 ; 0x01 
+    .data:0x000010b8    e883    st Y, r30   
+    .data:0x000010ba    f983    std Y+1, r31 ; 0x01 
+    .data:0x000010bc    0895    ret 
+    .data:0x000010be    ae17    cp r26, r30            ; Returns 1 if r31:r30 > r27:r26, else 0
+    .data:0x000010c0    bf07    cpc r27, r31    
+    .data:0x000010c2    e1e0    ldi r30, 0x01 ; 1   
+    .data:0x000010c4    08f0    brcs .+2 ; 0x000010c8  ; "branch if carry set"
+    .data:0x000010c6    ee27    eor r30, r30           
+    .data:0x000010c8    0895    ret                    ; end
+    .data:0x000010ca    1196    adiw r26, 0x01 ; 1  
+    .data:0x000010cc    02d0    rcall .+4 ; 0x000010d2  
+    .data:0x000010ce    fe2f    mov r31, r30    
+    .data:0x000010d0    1197    sbiw r26, 0x01 ; 1  
+    .data:0x000010d2    e199    sbic 0x1c, 1 ; 28       Method to get byte out of EEPROM
+    .data:0x000010d4    fecf    rjmp .-4 ; 0x000010d2   - Wait until Bit in IO register is cleared
+    .data:0x000010d6    ff93    push r31                - Save r31
+    .data:0x000010d8    ffb7    in r31, 0x3f ; 63       - Save 0x3f in r31
+    .data:0x000010da    f894    cli                     - Disable Interrupts
+    .data:0x000010dc    aebb    out 0x1e, r26 ; 30      - Put Byte Offset in 0x1e
+    .data:0x000010de    bfbb    out 0x1f, r27 ; 31      - Put 0 (Byte Count?) in 0x1f
+    .data:0x000010e0    e09a    sbi 0x1c, 0 ; 28        - Set Bit in IO register
+    .data:0x000010e2    edb3    in r30, 0x1d ; 29       - Put Byte from EEPROM in r30
+    .data:0x000010e4    ffbf    out 0x3f, r31 ; 63      - Restore 0x3f
+    .data:0x000010e6    ff91    pop r31                 - Restore r31
+    .data:0x000010e8    0895    ret                     -Return-
+    .data:0x000010ea    ee0f    add r30, r30    
+    .data:0x000010ec    ee0f    add r30, r30    
+    .data:0x000010ee    ee0f    add r30, r30    
+    .data:0x000010f0    0895    ret 
+    .data:0x000010f2    e695    lsr r30 
+    .data:0x000010f4    e695    lsr r30 
+    .data:0x000010f6    e695    lsr r30 
+    .data:0x000010f8    0895    ret 
+    .data:0x000010fa    5a93    st -Y, r21  
+    .data:0x000010fc    4a93    st -Y, r20  
+    .data:0x000010fe    3a93    st -Y, r19  
+    .data:0x00001100    2a93    st -Y, r18  
+    .data:0x00001102    1a93    st -Y, r17  
+    .data:0x00001104    0a93    st -Y, r16  
+    .data:0x00001106    0895    ret 
+    .data:0x00001108    5d81    ldd r21, Y+5 ; 0x05 
+    .data:0x0000110a    4c81    ldd r20, Y+4 ; 0x04 
+    .data:0x0000110c    3b81    ldd r19, Y+3 ; 0x03 
+    .data:0x0000110e    2a81    ldd r18, Y+2 ; 0x02 
+    .data:0x00001110    1981    ldd r17, Y+1 ; 0x01 
+    .data:0x00001112    0881    ld r16, Y   
+    .data:0x00001114    0895    ret 
+    .data:0x00001116    0991    ld r16, Y+  ; button code jumps here
+    .data:0x00001118    1991    ld r17, Y+  
+    .data:0x0000111a    0895    ret 
+    .data:0x0000111c    ffff    .word 0xffff ; ???? 
+    .data:0x0000111e    ffff    .word 0xffff ; ???? 
+    .data:0x00001120    ffff    .word 0xffff ; ???? 
+    .data:0x00001122    ffff    .word 0xffff ; ???? 
+    .data:0x00001124    ffff    .word 0xffff ; ???? 
+    .data:0x00001126    e0918f01    lds r30, 0x018F ; Mix up all the values a little
+    .data:0x00001128    e395    inc r30             ; First Byte
+    .data:0x0000112a    e0938f01    sts 0x018F, r30 
+    .data:0x0000112c    e0919001    lds r30, 0x0190 
+    .data:0x0000112e    ea95    dec r30             ; Second Byte
+    .data:0x00001130    e0939001    sts 0x0190, r30 
+    .data:0x00001132    e0919101    lds r30, 0x0191 
+    .data:0x00001134    e395    inc r30             ; Third Byte
+    .data:0x00001136    e0939101    sts 0x0191, r30 
+    .data:0x00001138    e3b3    in r30, 0x13        ; Actually read the button
+    .data:0x0000113a    0895    ret
