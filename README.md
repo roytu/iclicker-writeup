@@ -24,7 +24,7 @@ e.g. to upload the infinite votes firmware described in this document:
 ```
 where `/dev/tty*` should be the device handle for your serial programmer.
 
-# Details on the Reverse-Engineering Process 
+# Details on the Reverse-Engineering Process
 
 The original iClicker uses an ATMega8U2 chip as a microcontroller, which talks to a transceiver chip to transmit/receive votes.  The board has a 6-pin SPI interface (which one solders a header to) to talk to the chip.
 
@@ -35,7 +35,9 @@ The chip has two relevant non-volatile memory sections:
 
 ## SPI Header
 
-TODO describe 6-pin SPI pinout
+You gotta solder something onto the iClicker ISP pins to connect it to your Arduino as so:
+![](isp-programming.jpg)
+
 
 ## Communication (Hardware)
 
@@ -69,7 +71,7 @@ At this point I'm sure there's some canonical way to disassemble the binary but 
 The result looks something like:
 ```
 .data:0x00000000    13c0    rjmp .+38 ; 0x00000028  
-.data:0x00000002    e9c1    rjmp .+978 ; 0x000003d6 
+.data:0x00000002    e9c1    rjmp .+978 ; 0x000003d6
 .data:0x00000004    fdcf    rjmp .-6 ; 0x00000000   
 .data:0x00000006    fccf    rjmp .-8 ; 0x00000000   
 .data:0x00000008    fbcf    rjmp .-10 ; 0x00000000  
@@ -93,7 +95,7 @@ Our objectives for the patch are as follows:
 For AVR chips, the data space from 0x00 to 0x38 stores the interrupt vector table, which tells the program where to jump to when certain interrupts trigger.  See section 11.2 of http://www.atmel.com/images/doc7799.pdf for the ATMega8U2 table.  By checking the traces of the iClicker PCB we see that the transceiver is connected to INT0 on the chip, suggesting that INT0 is triggered when data is received.  INT0's vector is stored at 0x02 of flash memory, where we see this line:
 
 ```
-.data:0x00000002    e9c1    rjmp .+978 ; 0x000003d6 
+.data:0x00000002    e9c1    rjmp .+978 ; 0x000003d6
 ```
 
 At 0x03d6, we see the following code:
@@ -122,7 +124,7 @@ I don't remember how we figured this out but somehow we found the point where th
 
 ```
 .data:0x00000522    e3b3    in r30, 0x13 ; 19          Save GPIO input to r30
-.data:0x00000524    ef73    andi r30, 0x3F ; 63 
+.data:0x00000524    ef73    andi r30, 0x3F ; 63
 .data:0x00000526    afe3    ldi r26, 0x3F ; 63  
 .data:0x00000528    ea27    eor r30, r26    
 .data:0x0000052a    0e2f    mov r16, r30    
@@ -136,17 +138,17 @@ We see the code read some GPIO input and do some logic, eventually storing it in
 
 ```
 ....
-.data:0x00001122    ffff    .word 0xffff ; ???? 
-.data:0x00001124    ffff    .word 0xffff ; ???? 
+.data:0x00001122    ffff    .word 0xffff ; ????
+.data:0x00001124    ffff    .word 0xffff ; ????
 .data:0x00001126    e0918f01    lds r30, 0x018F ; Mix up all the values a little
 .data:0x00001128    e395    inc r30             ; First Byte
-.data:0x0000112a    e0938f01    sts 0x018F, r30 
-.data:0x0000112c    e0919001    lds r30, 0x0190 
+.data:0x0000112a    e0938f01    sts 0x018F, r30
+.data:0x0000112c    e0919001    lds r30, 0x0190
 .data:0x0000112e    ea95    dec r30             ; Second Byte
-.data:0x00001130    e0939001    sts 0x0190, r30 
-.data:0x00001132    e0919101    lds r30, 0x0191 
+.data:0x00001130    e0939001    sts 0x0190, r30
+.data:0x00001132    e0919101    lds r30, 0x0191
 .data:0x00001134    e395    inc r30             ; Third Byte
-.data:0x00001136    e0939101    sts 0x0191, r30 
+.data:0x00001136    e0939101    sts 0x0191, r30
 .data:0x00001138    e3b3    in r30, 0x13        ; Actually read the button
 .data:0x0000113a    0895    ret
 ```
@@ -154,7 +156,7 @@ We see the code read some GPIO input and do some logic, eventually storing it in
 and then we modified the instruction at 0x0522 to call this:
 
 ```
-.data:0x00000522    01d6    rcall .+3074 ;        jump to 0x1126 
+.data:0x00000522    01d6    rcall .+3074 ;        jump to 0x1126
 ```
 
 So now, every time the vote is sent out, each byte of the ID is incremented by one.  Strangely, when using this code on our test base station, the IDs don't increment but become seemingly pseudorandom, so probably this code is a little broken but anyway it gets the job done.
@@ -165,22 +167,22 @@ I don't know how we did this, it's been too long and our documentation sucks.  H
 
 ```
     from:
-    .data:0x0000023a    a330    cpi r26, 0x03 ; 3 
+    .data:0x0000023a    a330    cpi r26, 0x03 ; 3
     to:
     .data:0x0000023a    af3f    cpi r26, 0xFF ; 255
-    
+
     from:
     .data:0x000004a8    19f4    brne .+6 ; 0x000004b0   
     to:
     .data:0x000004a8    0000    nop
-    
+
     from:
     .data:0x00000616    ebe4    ldi r30, 0x4B ; 75  
     to:
     .data:0x00000616    e2e0    ldi r30, 0x2  ; 2  
-    
+
     from:
-    .data:0x0000063a    e4e6    ldi r30, 0x64 ; 100 
+    .data:0x0000063a    e4e6    ldi r30, 0x64 ; 100
     to:
     .data:0x0000063a    e2e0    ldi r30, 0x02 ; 2
 
@@ -207,11 +209,11 @@ This effectively selects the relevant assembly bytes in each line of the disasse
 
 ```
 .data:0x00000000    13c0    rjmp .+38 ; 0x00000028  
-.data:0x00000002    e9c1    rjmp .+978 ; 0x000003d6 
+.data:0x00000002    e9c1    rjmp .+978 ; 0x000003d6
 .data:0x00000004    fdcf    rjmp .-6 ; 0x00000000   
 .data:0x00000006    fccf    rjmp .-8 ; 0x00000000   
 .data:0x00000008    fbcf    rjmp .-10 ; 0x00000000  
-.data:0x0000000a    facf    rjmp .-12 ; 0x00000000 
+.data:0x0000000a    facf    rjmp .-12 ; 0x00000000
 ...
 ```
 
