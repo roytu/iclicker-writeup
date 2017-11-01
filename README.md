@@ -1,6 +1,6 @@
 # README
 
-This repository is a guide on how to patch iClicker firmware.  The iClicker is connected by SPI to an SPI-to-USB programmer, which is connected to a UNIX computer.  We document how we reverse-engineered the firmware and modified it to spoof votes from fake iClickers, successfully flooding a base station with these votes.
+This repository is a guide on how to patch iClicker firmware.  The iClicker is connected by ISP to an ISP-to-USB programmer, which is connected to a UNIX computer.  We document how we reverse-engineered the firmware and modified it to spoof votes from fake iClickers, successfully flooding a base station with these votes.
 
 This document was written several years after this project ended.  We are reconstructing what we did based on the patched code itself, and scraps of notes here and there.  Hence, some of it might be misleading, or straight wrong.  But we tried.  We really did!
 
@@ -26,22 +26,22 @@ where `/dev/tty*` should be the device handle for your serial programmer.
 
 # Details on the Reverse-Engineering Process
 
-The original iClicker uses an ATMega8U2 chip as a microcontroller, which talks to a transceiver chip to transmit/receive votes.  The board has a 6-pin SPI interface (which one solders a header to) to talk to the chip.
+The original iClicker uses an ATMega8U2 chip as a microcontroller, which talks to a transceiver chip to transmit/receive votes.  The board has a 6-pin <a href="http://mikeyzhong.com/files/iclicker/isp-header.png">ISP interface</a> (which one solders a header to) to talk to the chip.
 
 The chip has two relevant non-volatile memory sections:
 
 * Flash: stores the firmware
 * EEPROM: stores the unique iClicker ID and some copyright information
 
-## SPI Header
+## ISP Header
 
 You gotta solder something onto the iClicker ISP pins to connect it to your Arduino as so:
-![](isp-programming.jpg)
-
+![](http://mikeyzhong.com/files/iclicker/isp-programming.png)
+Adapted from <a href="http://arkorobotics.com/blog/?p=17">arkorobotics.com/blog/?p=17</a> and <a href="https://forum.arduino.cc/index.php?topic=347441.0">forum.arduino.cc/index.php?topic=347441.0</a>
 
 ## Communication (Hardware)
 
-To communicate to the AVR chip, we need an AVR programmer.  Commercial USB-to-SPI AVR programmers exist and are cheap, but fortunately it is possible to turn any Arduino into a programmer (see https://www.arduino.cc/en/Tutorial/ArduinoISP ).  The Arduino shows up as a device (`/dev/tty*` on Unix systems) and acts as an interface between our computer and the iClicker chip.
+To communicate to the AVR chip, we need an AVR programmer.  Commercial USB-to-ISP AVR programmers exist and are cheap, but fortunately it is possible to turn any Arduino into a programmer (see https://www.arduino.cc/en/Tutorial/ArduinoISP ).  The Arduino shows up as a device (`/dev/tty*` on Unix systems) and acts as an interface between our computer and the iClicker chip.
 
 After wiring it up according to the link above, we can communicate with the ATMega8U2 using avrdude, using commands like:
 ```
@@ -50,7 +50,7 @@ avrdude -v -P /dev/ttyACM0 -c avrisp -p m8 -b 19200 -U flash:w:new_flash12.bin:r
 where the flags are:
 ```
 -v: verbose output
--P <device>: device handle to the SPI programmer
+-P <device>: device handle to the ISP programmer
 -c avrisp: programmer id (our Arduino)
 -p m8: type of the microcontroller we are programming (m8 for ATMega8U2)
 -b 19200: baud rate (19200 seems to work reliably)
